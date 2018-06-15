@@ -8,6 +8,7 @@ class CFrameWork
 {
 	CImage mMesh;						// 바탕화면
 	CGameObject* mPlayer;			// 플레이어
+	CGameObject* mDuo;				// 2인용
 	CGameObject* mEnemy;			// 적
 	CScene* mScene;					// 씬
 	

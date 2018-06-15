@@ -59,7 +59,21 @@ void CPlayer::MakeBullet()
 {
 	// Make Bullet with Player Position
 	if(IsBullet)
-		mBullet.push_back(new CBullet(mPosition));
+		switch (mBulletNumber)
+		{
+		case 1:
+			mBullet.push_back(new CBullet(mPosition));
+			break;
+		case 2:
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 10}));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 10}));
+			break;
+		case 3:
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 12 }));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 12 }));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y}));
+			break;
+		}
 }
 
 void CPlayer::Animate()
