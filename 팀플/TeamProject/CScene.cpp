@@ -43,6 +43,7 @@ void CScene::Render(HDC Buffer, GAMESTATE State)
 			MeshCount = 0;
 		mTitleMesh[MeshCount++ / 15].Draw(Buffer, 0, 0, WIDTH, HEIGHT);
 	}
+
 	if (State == GAMEPLAY)
 	{
 		mPlayMesh.Draw(Buffer, MeshAnimate, 0, WIDTH, HEIGHT);

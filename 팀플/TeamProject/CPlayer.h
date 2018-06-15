@@ -10,6 +10,7 @@ class CPlayer : public CGameObject
 	int mMeshCount;
 	int mDirect;
 	int mBulletCount = 0;
+	int mBulletMode = 1;
 	bool IsBullet = false;
 public:
 	CPlayer();

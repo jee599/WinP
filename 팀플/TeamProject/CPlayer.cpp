@@ -54,6 +54,7 @@ void CPlayer::StopBullet()
 {
 	IsBullet = false;
 }
+
 void CPlayer::MakeBullet()
 {
 	// Make Bullet with Player Position
