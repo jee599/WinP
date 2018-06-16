@@ -9,6 +9,7 @@ class CEnemy : public CGameObject
 	ENEMYSTATE mState;
 	bool IsDead = false;
 	int mMoving;
+	int mType;
 public:
 	CEnemy();
 	~CEnemy();

@@ -1,17 +1,28 @@
 #include "CPlayer.h"
 
-CPlayer::CPlayer(int Type)
+CPlayer::CPlayer(TYPE Type, int Duo)
 {
 	mType = Type;
-
+	mDuoMode = Duo;
 	mDirect = STOP;
 	mMeshCount = 0;
 	mObjectSize = 50;
-	mPosition = { 30, HEIGHT / 3 * mType };
-	if (Type == 1)
+	mPosition = { 30, (rand ()% 300) * 2 + 100};
+	switch (Type)
+	{
+	case FIRE:
 		mMesh[0].Load(TEXT("fire.png"));
-	if (Type == 2)
+		break;
+	case WATER:
 		mMesh[0].Load(TEXT("water.png"));
+		break;
+	case GRASS:
+		mMesh[0].Load(TEXT("grass.png"));
+		break;
+	case ELEC:
+		mMesh[0].Load(TEXT("elec.png"));
+		break;
+	}
 }
 
 CPlayer::~CPlayer()
@@ -23,7 +34,7 @@ CPlayer::~CPlayer()
 
 void CPlayer::Move(WPARAM wParam)
 {
-	if(mType == 1)
+	if(mDuoMode)
 	// Set Player Direction by wParam
 	switch (wParam)
 	{
@@ -42,7 +53,7 @@ void CPlayer::Move(WPARAM wParam)
 	case VK_RETURN:
 		IsBullet = true;
 	}
-	if (mType == 2)
+	else
 	{
 		switch (wParam)
 		{
@@ -75,16 +86,16 @@ void CPlayer::MakeBullet()
 		switch (mBulletNumber)
 		{
 		case 1:
-			mBullet.push_back(new CBullet(mPosition));
+			mBullet.push_back(new CBullet(mPosition, mType));
 			break;
 		case 2:
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 10}));
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 10}));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 10 }, mType));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 10}, mType));
 			break;
 		case 3:
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 15 }));
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 15 }));
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y}));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 15 }, mType));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 15 }, mType));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y }, mType));
 			break;
 		}
 }

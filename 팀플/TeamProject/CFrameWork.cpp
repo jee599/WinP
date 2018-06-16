@@ -13,13 +13,13 @@ CFrameWork::~CFrameWork()
 
 void CFrameWork::InitialObject()
 {
-		mEnemy[mEnemyCount++] = new CEnemy;
+	mEnemy[mEnemyCount++] = new CEnemy;
 	if(!mScene)
 		mScene = new CScene;
 	if (!mPlayer)
-		mPlayer = new CPlayer(1);
+		mPlayer = new CPlayer(WATER,1);
 	if (!mDuo)
-		mDuo = new CPlayer(2);
+		mDuo = new CPlayer(GRASS,0);
 	GameState = TITLE;
 }
 
@@ -51,6 +51,8 @@ void CFrameWork::Render(HDC MainBuffer)
 	}
 	
 	BitBlt(MainBuffer, 0, 0, WIDTH, HEIGHT, BackBuffer, 0, 0, SRCCOPY);
+	DeleteObject(hBitmap);
+	DeleteDC(BackBuffer);
 }
 
 void CFrameWork::KeyDown(WPARAM wParam)

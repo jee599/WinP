@@ -5,7 +5,7 @@ class CBullet : public CGameObject
 {
 public:
 	CBullet();
-	CBullet(POINT);
+	CBullet(POINT, TYPE);
 	~CBullet();
 
 	bool Animate();

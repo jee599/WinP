@@ -10,8 +10,9 @@ class CPlayer : public CGameObject
 	int mDirect;
 	int mBulletCount = 0;
 	int mBulletNumber = 1;
-	int mType;
-	
+	int mDuoMode;
+
+	TYPE mType;
 	bool IsBullet = false;
 
 public:
@@ -19,7 +20,7 @@ public:
 
 public:
 	CPlayer() {}
-	CPlayer(int);
+	CPlayer(TYPE,int );
 	~CPlayer();
 
 public:

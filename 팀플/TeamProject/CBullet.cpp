@@ -6,16 +6,39 @@ CBullet::CBullet()
 
 CBullet::~CBullet()
 {
-	if(mMesh[4])
-	mMesh[4].Destroy();
+	for (int i = 0; i < 10; ++i)
+		mMesh[i].Destroy();
 }
 
-CBullet::CBullet(POINT p)
+CBullet::CBullet(POINT p, TYPE Type)
 {
-	mMesh[0].Load(TEXT("lite1.png"));
-	mMesh[1].Load(TEXT("lite2.png"));
-	mMesh[2].Load(TEXT("lite3.png"));
-	mMesh[3].Load(TEXT("lite4.png"));
+	switch (Type)
+	{
+	case FIRE:
+		mMesh[0].Load(TEXT("fire1.png"));
+		mMesh[1].Load(TEXT("fire2.png"));
+		mMesh[2].Load(TEXT("fire3.png"));
+		mMesh[3].Load(TEXT("fire4.png"));
+		break;
+	case WATER:
+		mMesh[0].Load(TEXT("water1.png"));
+		mMesh[1].Load(TEXT("water2.png"));
+		mMesh[2].Load(TEXT("water3.png"));
+		mMesh[3].Load(TEXT("water4.png"));
+		break;
+	case GRASS:
+		mMesh[0].Load(TEXT("grass1.png"));
+		mMesh[1].Load(TEXT("grass2.png"));
+		mMesh[2].Load(TEXT("grass3.png"));
+		mMesh[3].Load(TEXT("grass4.png"));
+		break;
+	case ELEC:
+		mMesh[0].Load(TEXT("grass1.png"));
+		mMesh[1].Load(TEXT("grass2.png"));
+		mMesh[2].Load(TEXT("grass3.png"));
+		mMesh[3].Load(TEXT("grass4.png"));
+		break;
+	}
 	mPosition = p;
 	mObjectSize = 30;
 	mMeshCount = 0;
