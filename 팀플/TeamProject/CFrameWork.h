@@ -18,6 +18,7 @@ class CFrameWork
 	HBITMAP hBitmap;
 	 
 	int Timer = 0;
+	int mBossCount = 0;
 	int mEnemyCount = 0;
 public:
 	CFrameWork();
@@ -28,6 +29,8 @@ public:
 	void Render(HDC);
 	void Animate();
 	void CollCheck();
+
+	void MakeFood();
 	void MouseDown(LPARAM);
 	void KeyDown(WPARAM);
 	void KeyUp(WPARAM);

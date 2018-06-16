@@ -12,6 +12,7 @@ class CPlayer : public CGameObject
 	int mBulletNumber = 1;
 	int mDuoMode;
 
+	int mLevel = 1;
 	TYPE mType;
 	bool IsBullet = false;
 

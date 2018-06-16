@@ -7,7 +7,7 @@ CPlayer::CPlayer(TYPE Type, int Duo)
 	mDirect = STOP;
 	mMeshCount = 0;
 	mObjectSize = 50;
-	mPosition = { 30, (rand ()% 300) * 2 + 100};
+	mPosition = { 30,200 + 300*Duo};
 	switch (Type)
 	{
 	case FIRE:

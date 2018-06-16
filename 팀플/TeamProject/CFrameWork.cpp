@@ -13,6 +13,7 @@ CFrameWork::~CFrameWork()
 
 void CFrameWork::InitialObject()
 {
+	srand(time(NULL));
 	mEnemy[mEnemyCount++] = new CEnemy;
 	if(!mScene)
 		mScene = new CScene;
@@ -64,26 +65,36 @@ void CFrameWork::KeyDown(WPARAM wParam)
 	}
 }
 
+void CFrameWork::MakeFood()
+{
+
+}
+
 void CFrameWork::Animate()
 {
 	if (GameState == GAMEPLAY)
 	{
-		if (++Timer % 100 == 0)
+		if (++Timer % 300 == 0)
 		{
+			mBossCount++;
 			mEnemy[mEnemyCount++] = new CEnemy;
 		}
 		dynamic_cast<CPlayer*>(mPlayer)->Animate();
 		dynamic_cast<CPlayer*>(mDuo)->Animate();
 
-		for (int i = 0; i < mEnemyCount;++i)
-			if (dynamic_cast<CEnemy*>(mEnemy[i])->Animate())
+		for (int i = 0; i < mEnemyCount; ++i)
+		{
+			int Result = dynamic_cast<CEnemy*>(mEnemy[i])->Animate();
+			if (Result)
 			{
 				delete mEnemy[i];
 				for (int j = i; j < mEnemyCount; ++j)
 					mEnemy[j] = mEnemy[j + 1];
 				mEnemyCount--;
 			}
-
+			if (Result == 2)
+				MakeFood();
+		}
 		CollCheck();
 	}
 }

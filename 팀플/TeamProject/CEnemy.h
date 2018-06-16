@@ -7,16 +7,16 @@ class CEnemy : public CGameObject
 	int mLife;
 	CEffect* mEffect;
 	ENEMYSTATE mState;
-	bool IsDead = false;
+	int IsEnd = 0;
 	int mMoving;
 	int mType;
+	int mDir;
 public:
 	CEnemy();
 	~CEnemy();
 
 	void Render(HDC);
 	void Collision();
-	bool Animate();
-	int GetLife() { return mLife; }
+	int Animate();
 };
 
