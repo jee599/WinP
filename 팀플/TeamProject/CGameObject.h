@@ -21,3 +21,14 @@ public:
 	POINT GetPosition();
 };
 
+class CItem : public CGameObject
+{
+public:
+	CItem();
+	~CItem();
+	CItem(POINT);
+
+public:
+	void Animate();
+};
+
