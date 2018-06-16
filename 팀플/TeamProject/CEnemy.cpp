@@ -11,6 +11,9 @@ CEnemy::~CEnemy()
 {
 }
 
+void CEnemy::CollCheck()
+{
+}
 void CEnemy::Render(HDC Buffer)
 {
 	mMesh[0].Draw(Buffer, mPosition.x, mPosition.y, PLAYERSIZE, PLAYERSIZE);

@@ -10,5 +10,6 @@ public:
 
 	bool Animate();
 	void Render(HDC);
+	bool CollCheck(RECT);
 };
 

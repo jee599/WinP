@@ -16,6 +16,13 @@ CBullet::CBullet(POINT p)
 	mObjectSize = 30;
 }
 
+bool CBullet::CollCheck(RECT Rect)
+{
+	RECT Temp;
+	if (IntersectRect(&Temp, &Rect, &GetRect()))
+		return true;
+	return false;
+}
 bool CBullet::Animate()
 {
 	mPosition.x += BULLETSPEED;

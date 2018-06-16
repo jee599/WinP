@@ -30,8 +30,8 @@ void CFrameWork::MouseDown(LPARAM lParam)
 	Point.x = LOWORD((int)lParam);
 	Point.y = HIWORD((int)lParam);
 
-	if(GameState == TITLE)
-	GameState = mScene->MouseDown(Point);
+	if (GameState == TITLE)
+		GameState = mScene->MouseDown(Point);
 }
 
 void CFrameWork::Render(HDC MainBuffer)
@@ -54,23 +54,47 @@ void CFrameWork::Render(HDC MainBuffer)
 }
 
 void CFrameWork::KeyDown(WPARAM wParam)
-{	
-	dynamic_cast<CPlayer*>(mPlayer)->Move(wParam);
-	dynamic_cast<CPlayer*>(mDuo)->Move(wParam);
+{
+	if (GameState == GAMEPLAY)
+	{
+		dynamic_cast<CPlayer*>(mPlayer)->Move(wParam);
+		dynamic_cast<CPlayer*>(mDuo)->Move(wParam);
+	}
 }
 
 void CFrameWork::Animate()
 {
-	dynamic_cast<CPlayer*>(mPlayer)->Animate();
-	dynamic_cast<CPlayer*>(mDuo)->Animate();
+	if (GameState == GAMEPLAY)
+	{
+		dynamic_cast<CPlayer*>(mPlayer)->Animate();
+		dynamic_cast<CPlayer*>(mDuo)->Animate();
+	}
+}
+
+void CFrameWork::CollCheck()
+{
+	auto iter = dynamic_cast<CPlayer*>(mPlayer)->mBullet.begin();
+	for (; iter != dynamic_cast<CPlayer*>(mPlayer)->mBullet.end();)
+	{
+		if ((*iter)->CollCheck(mEnemy->GetRect()))
+		{
+			delete(*iter);
+			iter = dynamic_cast<CPlayer*>(mPlayer)->mBullet.erase(iter);
+		}
+		else
+			++iter;
+	}
 }
 
 void CFrameWork::KeyUp(WPARAM wParam)
 {
-	if (wParam == VK_RETURN)
-		dynamic_cast<CPlayer*>(mPlayer)->StopBullet();
-	if(wParam == VK_SPACE)
-		dynamic_cast<CPlayer*>(mDuo)->StopBullet();
+	if (GameState == GAMEPLAY)
+	{
+		if (wParam == VK_RETURN)
+			dynamic_cast<CPlayer*>(mPlayer)->StopBullet();
+		if (wParam == VK_SPACE)
+			dynamic_cast<CPlayer*>(mDuo)->StopBullet();
+	}
 }
 
 void CFrameWork::DestroyObject()

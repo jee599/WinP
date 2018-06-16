@@ -91,7 +91,6 @@ void CPlayer::MakeBullet()
 			break;
 		}
 }
-
 void CPlayer::Animate()
 {
 	if (mBulletCount++ % BULLETRATE == 0)

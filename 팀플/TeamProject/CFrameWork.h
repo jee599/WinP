@@ -25,6 +25,7 @@ public:
 	void DestroyObject();
 	void Render(HDC);
 	void Animate();
+	void CollCheck();
 	void MouseDown(LPARAM);
 	void KeyDown(WPARAM);
 	void KeyUp(WPARAM);

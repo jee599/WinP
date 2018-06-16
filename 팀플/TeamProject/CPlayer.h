@@ -16,6 +16,7 @@ class CPlayer : public CGameObject
 
 public:
 	vector<CBullet*> mBullet;
+
 public:
 	CPlayer() {}
 	CPlayer(int);
