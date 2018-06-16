@@ -46,8 +46,8 @@ void CScene::Render(HDC Buffer, GAMESTATE State)
 
 	if (State == GAMEPLAY)
 	{
-		mPlayMesh.Draw(Buffer, MeshAnimate, 0, WIDTH, HEIGHT);
-		mPlayMesh.Draw(Buffer, MeshAnimate+WIDTH, 0, WIDTH, HEIGHT);
+		mPlayMesh.Draw(Buffer, MeshAnimate + MeshAnimate%2, MeshAnimate % 2, WIDTH, HEIGHT);
+		mPlayMesh.Draw(Buffer, MeshAnimate+WIDTH + MeshAnimate % 2, MeshAnimate % 2, WIDTH, HEIGHT);
 		MeshAnimate--;
 		if (MeshAnimate < -WIDTH)
 			MeshAnimate = 0;

@@ -1,25 +1,19 @@
 #include "CPlayer.h"
 
-CPlayer::CPlayer()
-{
-	mDirect = STOP;
-	mMeshCount = 0;
-	mPosition = { 30, HEIGHT / 2 };
-	mMesh[0].Load((TEXT("종이1.png")));
-	mMesh[1].Load((TEXT("종이2.png")));
-	mMesh[2].Load((TEXT("종이3.png")));
-}
-
 CPlayer::CPlayer(int Type)
 {
-	switch (Type)
-	{
-	case PAPER:
-		mMesh[0].Load((TEXT("종이1.png")));
-		mMesh[1].Load((TEXT("종이2.png")));
-		mMesh[2].Load((TEXT("종이3.png")));
-		break;
-	}
+	mType = Type;
+
+	mDirect = STOP;
+	mMeshCount = 0;
+	mPosition = { 30, HEIGHT / 3 * mType };
+	if (Type == 1)
+		mMesh[0].Load(TEXT("fire.png"));
+	if (Type == 2)
+		mMesh[0].Load(TEXT("water.png"));
+	//mMesh[0].Load((TEXT("종이1.png")));
+	//mMesh[1].Load((TEXT("종이2.png")));
+	//mMesh[2].Load((TEXT("종이3.png")));
 }
 
 CPlayer::~CPlayer()
@@ -31,6 +25,7 @@ CPlayer::~CPlayer()
 
 void CPlayer::Move(WPARAM wParam)
 {
+	if(mType == 1)
 	// Set Player Direction by wParam
 	switch (wParam)
 	{
@@ -46,8 +41,28 @@ void CPlayer::Move(WPARAM wParam)
 	case VK_RIGHT:
 		mDirect = RIGHT;
 		break;
-	case VK_SPACE:
+	case VK_RETURN:
 		IsBullet = true;
+	}
+	if (mType == 2)
+	{
+		switch (wParam)
+		{
+		case 'w':
+			mDirect = UP;
+			break;
+		case 's':
+			mDirect = DOWN;
+			break;
+		case 'a':
+			mDirect = LEFT;
+			break;
+		case 'd':
+			mDirect = RIGHT;
+			break;
+		case VK_SPACE:
+			IsBullet = true;
+		}
 	}
 }
 void CPlayer::StopBullet()
@@ -118,5 +133,6 @@ void CPlayer::Render(HDC Buffer)
 		p->Render(Buffer);
 	if (mMeshCount == 30)
 		mMeshCount = 0;
-	mMesh[mMeshCount++ / 10].Draw(Buffer, mPosition.x, mPosition.y, PLAYERSIZE, PLAYERSIZE);
+	mMesh[0].Draw(Buffer, mPosition.x, mPosition.y, PLAYERSIZE, PLAYERSIZE);
+	//mMesh[mMeshCount++ / 10].Draw(Buffer, mPosition.x, mPosition.y, PLAYERSIZE, PLAYERSIZE);
 }
