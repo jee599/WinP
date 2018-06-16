@@ -11,10 +11,14 @@ CPlayer::CPlayer(TYPE Type, int Duo)
 	switch (Type)
 	{
 	case FIRE:
-		mMesh[0].Load(TEXT("fire.png"));
+		mMesh[0].Load(TEXT("颇捞府1.png"));
+		mMesh[1].Load(TEXT("颇捞府2.png"));
+		mMesh[2].Load(TEXT("颇捞府3.png"));
 		break;
 	case WATER:
-		mMesh[0].Load(TEXT("water.png"));
+		mMesh[0].Load(TEXT("部何扁1.png"));
+		mMesh[1].Load(TEXT("部何扁2.png"));
+		mMesh[2].Load(TEXT("部何扁3.png"));
 		break;
 	case GRASS:
 		mMesh[0].Load(TEXT("grass.png"));
@@ -145,5 +149,4 @@ void CPlayer::Render(HDC Buffer)
 	if (mMeshCount == 30)
 		mMeshCount = 0;
 	mMesh[0].Draw(Buffer, mPosition.x, mPosition.y, mObjectSize, mObjectSize);
-	//mMesh[mMeshCount++ / 10].Draw(Buffer, mPosition.x, mPosition.y, PLAYERSIZE, PLAYERSIZE);
 }

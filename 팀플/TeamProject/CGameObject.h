@@ -23,6 +23,7 @@ public:
 
 class CItem : public CGameObject
 {
+	int mDir;
 public:
 	CItem();
 	~CItem();
@@ -30,5 +31,6 @@ public:
 
 public:
 	void Animate();
+	void Render(HDC);
 };
 

@@ -10,6 +10,7 @@ class CFrameWork
 	CGameObject* mPlayer;			// 플레이어
 	CGameObject* mDuo;				// 2인용
 	CGameObject* mEnemy[100];			// 적
+	CGameObject* mItem[20];
 	CScene* mScene;					// 씬
 	
 	GAMESTATE GameState;			// 게임의 현재 상태
@@ -20,6 +21,7 @@ class CFrameWork
 	int Timer = 0;
 	int mBossCount = 0;
 	int mEnemyCount = 0;
+	int mItemCount = 0;
 public:
 	CFrameWork();
 	~CFrameWork();
@@ -30,7 +32,7 @@ public:
 	void Animate();
 	void CollCheck();
 
-	void MakeFood();
+	void MakeFood(POINT);
 	void MouseDown(LPARAM);
 	void KeyDown(WPARAM);
 	void KeyUp(WPARAM);

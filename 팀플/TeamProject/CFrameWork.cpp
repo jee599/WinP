@@ -18,9 +18,9 @@ void CFrameWork::InitialObject()
 	if(!mScene)
 		mScene = new CScene;
 	if (!mPlayer)
-		mPlayer = new CPlayer(WATER,1);
+		mPlayer = new CPlayer(FIRE,1);
 	if (!mDuo)
-		mDuo = new CPlayer(GRASS,0);
+		mDuo = new CPlayer(WATER,0);
 	GameState = TITLE;
 }
 
@@ -45,6 +45,8 @@ void CFrameWork::Render(HDC MainBuffer)
 
 	if (GameState == GAMEPLAY)
 	{
+		for (int i = 0; i < mItemCount; ++i)
+			mItem[i]->Render(BackBuffer);
 		for (int i = 0; i < mEnemyCount;++i)
 			mEnemy[i]->Render(BackBuffer);
 		mDuo->Render(BackBuffer);
@@ -65,16 +67,16 @@ void CFrameWork::KeyDown(WPARAM wParam)
 	}
 }
 
-void CFrameWork::MakeFood()
+void CFrameWork::MakeFood(POINT Position)
 {
-
+	mItem[mItemCount++] = new CItem(Position);
 }
 
 void CFrameWork::Animate()
 {
 	if (GameState == GAMEPLAY)
 	{
-		if (++Timer % 300 == 0)
+		if (++Timer % 100 == 0)
 		{
 			mBossCount++;
 			mEnemy[mEnemyCount++] = new CEnemy;
@@ -85,6 +87,8 @@ void CFrameWork::Animate()
 		for (int i = 0; i < mEnemyCount; ++i)
 		{
 			int Result = dynamic_cast<CEnemy*>(mEnemy[i])->Animate();
+			if (Result == 2)
+				MakeFood(dynamic_cast<CEnemy*>(mEnemy[i])->GetPosition());
 			if (Result)
 			{
 				delete mEnemy[i];
@@ -92,8 +96,6 @@ void CFrameWork::Animate()
 					mEnemy[j] = mEnemy[j + 1];
 				mEnemyCount--;
 			}
-			if (Result == 2)
-				MakeFood();
 		}
 		CollCheck();
 	}
@@ -115,7 +117,6 @@ void CFrameWork::CollCheck()
 			else
 				++iter;
 		}
-
 		auto iter1 = dynamic_cast<CPlayer*>(mDuo)->mBullet.begin();
 		for (; iter1 != dynamic_cast<CPlayer*>(mDuo)->mBullet.end();)
 		{
@@ -145,6 +146,8 @@ void CFrameWork::KeyUp(WPARAM wParam)
 
 void CFrameWork::DestroyObject()
 {
+	for (int i = 0; i < mItemCount; ++i)
+		delete mItem[i];
 	for(int i = 0; i < mEnemyCount;++i)
 		delete mEnemy[i];
 	if (mDuo)
