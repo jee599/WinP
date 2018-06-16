@@ -6,7 +6,6 @@
 
 class CPlayer : public CGameObject
 {
-	vector<CBullet*> mBullet;
 	int mMeshCount;
 	int mDirect;
 	int mBulletCount = 0;
@@ -15,6 +14,8 @@ class CPlayer : public CGameObject
 	
 	bool IsBullet = false;
 
+public:
+	vector<CBullet*> mBullet;
 public:
 	CPlayer() {}
 	CPlayer(int);

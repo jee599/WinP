@@ -8,6 +8,7 @@ class CScene
 	int MeshCount;
 	int MeshAnimate = 0;
 	RECT Button[3];			// 버튼의 RECT값 저장
+
 public:
 	CScene();
 	~CScene();

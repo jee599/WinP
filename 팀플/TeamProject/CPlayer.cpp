@@ -6,6 +6,7 @@ CPlayer::CPlayer(int Type)
 
 	mDirect = STOP;
 	mMeshCount = 0;
+	mObjectSize = 50;
 	mPosition = { 30, HEIGHT / 3 * mType };
 	if (Type == 1)
 		mMesh[0].Load(TEXT("fire.png"));
@@ -133,6 +134,6 @@ void CPlayer::Render(HDC Buffer)
 		p->Render(Buffer);
 	if (mMeshCount == 30)
 		mMeshCount = 0;
-	mMesh[0].Draw(Buffer, mPosition.x, mPosition.y, PLAYERSIZE, PLAYERSIZE);
+	mMesh[0].Draw(Buffer, mPosition.x, mPosition.y, mObjectSize, mObjectSize);
 	//mMesh[mMeshCount++ / 10].Draw(Buffer, mPosition.x, mPosition.y, PLAYERSIZE, PLAYERSIZE);
 }

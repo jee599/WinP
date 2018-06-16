@@ -37,8 +37,14 @@ GAMESTATE CScene::MouseDown(POINT Point)
 
 void CScene::Animation(ANIMATION State)
 {
+	switch (State)
+	{
+	case START:
+		break;
 
+	}
 }
+
 void CScene::Render(HDC Buffer, GAMESTATE State)
 {
 	if (State == TITLE)

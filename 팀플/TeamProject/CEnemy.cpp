@@ -2,15 +2,16 @@
 
 CEnemy::CEnemy()
 {
-	mMesh[0].Load(TEXT("Àû.png"));
-	mPosition = { WIDTH - 30, HEIGHT / 2 };
+	mMesh[0].Load(TEXT("pika.png"));
+	mPosition = { WIDTH - 100, HEIGHT / 2 };
+	mLife = 50;
 }
 
 CEnemy::~CEnemy()
 {
 }
 
-void CEnemy::Render()
+void CEnemy::Render(HDC Buffer)
 {
-
+	mMesh[0].Draw(Buffer, mPosition.x, mPosition.y, PLAYERSIZE, PLAYERSIZE);
 }

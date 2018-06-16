@@ -3,10 +3,11 @@
 
 class CEnemy : public CGameObject
 {
+	int mLife;
 public:
 	CEnemy();
 	~CEnemy();
 
-	void Render();
+	void Render(HDC);
 };
 

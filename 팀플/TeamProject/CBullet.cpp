@@ -13,6 +13,7 @@ CBullet::CBullet(POINT p)
 {
 	mMesh[0].Load(TEXT("ball.png"));
 	mPosition = p;
+	mObjectSize = 30;
 }
 
 bool CBullet::Animate()
@@ -25,5 +26,5 @@ bool CBullet::Animate()
 
 void CBullet::Render(HDC Buffer)
 {
-	mMesh[0].Draw(Buffer, mPosition.x, mPosition.y, BULLETSIZE, BULLETSIZE);
+	mMesh[0].Draw(Buffer, mPosition.x, mPosition.y, mObjectSize, mObjectSize);
 }
