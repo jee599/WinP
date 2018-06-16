@@ -15,9 +15,9 @@ CScene::CScene()
 	Button[EXIT] = { 815,606,914,670 };
 	
 	// Play State Mesh
-	mPlayMesh[0].Load(TEXT("stage11.png"));
-	mPlayMesh[1].Load(TEXT("stage12.png"));
-	mPlayMesh[2].Load(TEXT("stage13.png"));
+	mPlayMesh[0].Load(TEXT("stage21.png"));
+	mPlayMesh[1].Load(TEXT("stage22.png"));
+	mPlayMesh[2].Load(TEXT("stage23.png"));
 
 	memset(mMeshAnimate, 0, sizeof(mMeshAnimate));
 }

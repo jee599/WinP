@@ -6,7 +6,8 @@ CBullet::CBullet()
 
 CBullet::~CBullet()
 {
-		mMesh->Destroy();
+	if(mMesh[4])
+	mMesh[4].Destroy();
 }
 
 CBullet::CBullet(POINT p)
