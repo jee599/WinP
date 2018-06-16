@@ -2,7 +2,7 @@
 
 CBullet::CBullet()
 {
-	mMesh[0].Load(TEXT("ÃÑ¾Ë.png"));
+	mMesh[0].Load(TEXT("ball.png"));
 }
 
 CBullet::~CBullet()
@@ -11,7 +11,7 @@ CBullet::~CBullet()
 
 CBullet::CBullet(POINT p)
 {
-	mMesh[0].Load(TEXT("ÃÑ¾Ë.png"));
+	mMesh[0].Load(TEXT("ball.png"));
 	mPosition = p;
 }
 

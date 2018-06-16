@@ -10,12 +10,16 @@ class CPlayer : public CGameObject
 	int mMeshCount;
 	int mDirect;
 	int mBulletCount = 0;
-	int mBulletNumber = 3;
+	int mBulletNumber = 1;
+	int mType;
+	
 	bool IsBullet = false;
+
 public:
-	CPlayer();
+	CPlayer() {}
 	CPlayer(int);
 	~CPlayer();
+
 public:
 	void Move(WPARAM);
 	void Render(HDC);

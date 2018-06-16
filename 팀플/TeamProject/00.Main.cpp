@@ -72,6 +72,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM
 		break;
 
 	case WM_CHAR:
+		FrameWork->KeyDown(wParam);
 		break;
 
 	case WM_KEYDOWN:
