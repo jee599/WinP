@@ -29,6 +29,8 @@ void CFrameWork::MouseDown(LPARAM lParam)
 	POINT Point;
 	Point.x = LOWORD((int)lParam);
 	Point.y = HIWORD((int)lParam);
+
+	if(GameState == TITLE)
 	GameState = mScene->MouseDown(Point);
 }
 
