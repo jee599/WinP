@@ -13,8 +13,7 @@ CFrameWork::~CFrameWork()
 
 void CFrameWork::InitialObject()
 {
-	if (!mEnemy)
-		mEnemy = new CEnemy;
+		mEnemy[mEnemyCount++] = new CEnemy;
 	if(!mScene)
 		mScene = new CScene;
 	if (!mPlayer)
@@ -42,11 +41,12 @@ void CFrameWork::Render(HDC MainBuffer)
 	PatBlt(BackBuffer, 0, 0, WIDTH, HEIGHT, WHITENESS);
 
 	mScene->Render(BackBuffer,GameState);
-	
+
 	if (GameState == GAMEPLAY)
 	{
+		for (int i = 0; i < mEnemyCount;++i)
+			mEnemy[i]->Render(BackBuffer);
 		mDuo->Render(BackBuffer);
-		mEnemy->Render(BackBuffer);
 		mPlayer->Render(BackBuffer);
 	}
 	
@@ -66,37 +66,56 @@ void CFrameWork::Animate()
 {
 	if (GameState == GAMEPLAY)
 	{
+		if (++Timer % 100 == 0)
+		{
+			mEnemy[mEnemyCount++] = new CEnemy;
+		}
 		dynamic_cast<CPlayer*>(mPlayer)->Animate();
 		dynamic_cast<CPlayer*>(mDuo)->Animate();
+
+		for (int i = 0; i < mEnemyCount;++i)
+			if (dynamic_cast<CEnemy*>(mEnemy[i])->Animate())
+			{
+				delete mEnemy[i];
+				for (int j = i; j < mEnemyCount; ++j)
+					mEnemy[j] = mEnemy[j + 1];
+				mEnemyCount--;
+			}
+
 		CollCheck();
 	}
 }
 
 void CFrameWork::CollCheck()
 {
-	auto iter = dynamic_cast<CPlayer*>(mPlayer)->mBullet.begin();
-	for (; iter != dynamic_cast<CPlayer*>(mPlayer)->mBullet.end();)
+	for (int i = 0; i < mEnemyCount; ++i)
 	{
-
-		if ((*iter)->CollCheck(mEnemy->GetRect()))
+		auto iter = dynamic_cast<CPlayer*>(mPlayer)->mBullet.begin();
+		for (; iter != dynamic_cast<CPlayer*>(mPlayer)->mBullet.end();)
 		{
-			delete(*iter);
-			iter = dynamic_cast<CPlayer*>(mPlayer)->mBullet.erase(iter);
+			if ((*iter)->CollCheck(mEnemy[i]->GetRect()))
+			{
+				delete(*iter);
+				iter = dynamic_cast<CPlayer*>(mPlayer)->mBullet.erase(iter);
+				mEnemy[i]->Collision();
+			}
+			else
+				++iter;
 		}
-		else
-			++iter;
-	}
-	auto iter1 = dynamic_cast<CPlayer*>(mDuo)->mBullet.begin();
-	for (; iter1 != dynamic_cast<CPlayer*>(mDuo)->mBullet.end();)
-	{
 
-		if ((*iter1)->CollCheck(mEnemy->GetRect()))
+		auto iter1 = dynamic_cast<CPlayer*>(mDuo)->mBullet.begin();
+		for (; iter1 != dynamic_cast<CPlayer*>(mDuo)->mBullet.end();)
 		{
-			delete(*iter1);
-			iter1 = dynamic_cast<CPlayer*>(mDuo)->mBullet.erase(iter1);
+
+			if ((*iter1)->CollCheck(mEnemy[i]->GetRect()))
+			{
+				delete(*iter1);
+				iter1 = dynamic_cast<CPlayer*>(mDuo)->mBullet.erase(iter1);
+				mEnemy[i]->Collision();
+			}
+			else
+				++iter1;
 		}
-		else
-			++iter1;
 	}
 }
 
@@ -113,6 +132,8 @@ void CFrameWork::KeyUp(WPARAM wParam)
 
 void CFrameWork::DestroyObject()
 {
+	for(int i = 0; i < mEnemyCount;++i)
+		delete mEnemy[i];
 	if (mDuo)
 		delete mDuo;
 	if (mPlayer)

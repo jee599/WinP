@@ -6,14 +6,18 @@ CBullet::CBullet()
 
 CBullet::~CBullet()
 {
-	mMesh->Destroy();
+		mMesh->Destroy();
 }
 
 CBullet::CBullet(POINT p)
 {
-	mMesh[0].Load(TEXT("grass.png"));
+	mMesh[0].Load(TEXT("lite1.png"));
+	mMesh[1].Load(TEXT("lite2.png"));
+	mMesh[2].Load(TEXT("lite3.png"));
+	mMesh[3].Load(TEXT("lite4.png"));
 	mPosition = p;
 	mObjectSize = 30;
+	mMeshCount = 0;
 }
 
 bool CBullet::CollCheck(RECT Rect)
@@ -33,5 +37,7 @@ bool CBullet::Animate()
 
 void CBullet::Render(HDC Buffer)
 {
-	mMesh[0].Draw(Buffer, mPosition.x, mPosition.y, mObjectSize, mObjectSize);
+	if (mMeshCount >= 40)
+		mMeshCount = 0;
+	mMesh[mMeshCount++ / 10].Draw(Buffer, mPosition.x, mPosition.y, mObjectSize, mObjectSize);
 }

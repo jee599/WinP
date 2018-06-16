@@ -82,16 +82,19 @@ void CPlayer::MakeBullet()
 			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 10}));
 			break;
 		case 3:
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 12 }));
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 12 }));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 15 }));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 15 }));
 			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y}));
 			break;
 		}
 }
 void CPlayer::Animate()
 {
-	if (mBulletCount++ % BULLETRATE == 0)
+	if (mBulletCount++ == BULLETRATE)
+	{
 		MakeBullet();
+		mBulletCount = 0;
+	}
 	// 포문 안은 어려우니 이해하려 들지 마라(vector + iterator + delete + auto)
 	// mBullet = vector<CBullet*>형식   ->  iter = CBullet* ?
 	for (auto iter = mBullet.begin(); iter != mBullet.end();)
