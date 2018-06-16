@@ -12,9 +12,6 @@ CPlayer::CPlayer(int Type)
 		mMesh[0].Load(TEXT("fire.png"));
 	if (Type == 2)
 		mMesh[0].Load(TEXT("water.png"));
-	//mMesh[0].Load((TEXT("종이1.png")));
-	//mMesh[1].Load((TEXT("종이2.png")));
-	//mMesh[2].Load((TEXT("종이3.png")));
 }
 
 CPlayer::~CPlayer()

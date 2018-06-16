@@ -12,7 +12,10 @@ public:
 	~CGameObject();
 public:
 	virtual void Render(HDC);
-	RECT GetRect();
+	RECT GetRect() {
+		return { mPosition.x - mObjectSize/2 + 2, mPosition.y - mObjectSize/2 + 2,mPosition.x + mObjectSize/2 - 2,mPosition.y + mObjectSize/2 - 2};
+	}
+
 	POINT GetPosition();
 };
 

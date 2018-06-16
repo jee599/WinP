@@ -68,6 +68,7 @@ void CFrameWork::Animate()
 	{
 		dynamic_cast<CPlayer*>(mPlayer)->Animate();
 		dynamic_cast<CPlayer*>(mDuo)->Animate();
+		CollCheck();
 	}
 }
 
@@ -76,6 +77,7 @@ void CFrameWork::CollCheck()
 	auto iter = dynamic_cast<CPlayer*>(mPlayer)->mBullet.begin();
 	for (; iter != dynamic_cast<CPlayer*>(mPlayer)->mBullet.end();)
 	{
+
 		if ((*iter)->CollCheck(mEnemy->GetRect()))
 		{
 			delete(*iter);
@@ -83,6 +85,18 @@ void CFrameWork::CollCheck()
 		}
 		else
 			++iter;
+	}
+	auto iter1 = dynamic_cast<CPlayer*>(mDuo)->mBullet.begin();
+	for (; iter1 != dynamic_cast<CPlayer*>(mDuo)->mBullet.end();)
+	{
+
+		if ((*iter1)->CollCheck(mEnemy->GetRect()))
+		{
+			delete(*iter1);
+			iter1 = dynamic_cast<CPlayer*>(mDuo)->mBullet.erase(iter1);
+		}
+		else
+			++iter1;
 	}
 }
 

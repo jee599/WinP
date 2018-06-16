@@ -2,16 +2,16 @@
 
 CBullet::CBullet()
 {
-	mMesh[0].Load(TEXT("ball.png"));
 }
 
 CBullet::~CBullet()
 {
+	mMesh->Destroy();
 }
 
 CBullet::CBullet(POINT p)
 {
-	mMesh[0].Load(TEXT("ball.png"));
+	mMesh[0].Load(TEXT("grass.png"));
 	mPosition = p;
 	mObjectSize = 30;
 }

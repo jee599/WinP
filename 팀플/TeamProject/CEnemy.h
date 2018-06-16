@@ -9,6 +9,5 @@ public:
 	~CEnemy();
 
 	void Render(HDC);
-	void CollCheck();
 };
 
