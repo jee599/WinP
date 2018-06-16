@@ -35,6 +35,10 @@ GAMESTATE CScene::MouseDown(POINT Point)
 	return TITLE;
 }
 
+void CScene::Animation(ANIMATION State)
+{
+
+}
 void CScene::Render(HDC Buffer, GAMESTATE State)
 {
 	if (State == TITLE)
@@ -44,6 +48,10 @@ void CScene::Render(HDC Buffer, GAMESTATE State)
 		mTitleMesh[MeshCount++ / 15].Draw(Buffer, 0, 0, WIDTH, HEIGHT);
 	}
 
+	if (State == CHANGE)
+	{
+		
+	}
 	if (State == GAMEPLAY)
 	{
 		mPlayMesh.Draw(Buffer, MeshAnimate + MeshAnimate%2, MeshAnimate % 2, WIDTH, HEIGHT);

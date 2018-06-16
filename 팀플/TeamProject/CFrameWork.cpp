@@ -30,7 +30,8 @@ void CFrameWork::MouseDown(LPARAM lParam)
 	Point.x = LOWORD((int)lParam);
 	Point.y = HIWORD((int)lParam);
 
-	GameState = mScene->MouseDown(Point);
+	if (GameState == TITLE)
+		GameState = mScene->MouseDown(Point);
 }
 
 void CFrameWork::Render(HDC MainBuffer)

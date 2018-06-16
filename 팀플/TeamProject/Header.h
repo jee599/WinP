@@ -13,6 +13,7 @@ using namespace std;
 enum PLAYER_TYPE { PAPER };
 enum GAMESTATE  {CHANGE, GAMEPLAY, EXIT,TITLE};
 enum DIRECT {STOP, UP, RIGHT, DOWN, LEFT};
+enum ANIMATION {START};
 
 // define
 #define PLAYERSPEED 3

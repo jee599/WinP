@@ -13,6 +13,7 @@ public:
 	~CScene();
 public:
 	void Render(HDC, GAMESTATE);
+	void Animation(ANIMATION);
 	GAMESTATE MouseDown(POINT);
 };
 
