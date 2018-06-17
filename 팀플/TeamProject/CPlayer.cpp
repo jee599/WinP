@@ -6,6 +6,7 @@ CPlayer::CPlayer(TYPE Type, int Duo)
 	mDuoMode = Duo;
 	mDirect = STOP;
 	mMeshCount = 0;
+	mBulletNumber = 2;
 	mObjectSize = 50;
 	mPosition = { 30,200 + 300*Duo};
 	switch (Type)
@@ -90,16 +91,16 @@ void CPlayer::MakeBullet()
 		switch (mBulletNumber)
 		{
 		case 1:
-			mBullet.push_back(new CBullet(mPosition, mType));
+			mBullet.push_back(new CBullet({ mPosition.x + 40, mPosition.y + 10 }, mType));
 			break;
 		case 2:
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 10 }, mType));
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 10}, mType));
+			mBullet.push_back(new CBullet({ mPosition.x + 40, mPosition.y + 20 }, mType));
+			mBullet.push_back(new CBullet({ mPosition.x + 40, mPosition.y}, mType));
 			break;
 		case 3:
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 15 }, mType));
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 15 }, mType));
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y }, mType));
+			mBullet.push_back(new CBullet({ mPosition.x + 40, mPosition.y + 25 }, mType));
+			mBullet.push_back(new CBullet({ mPosition.x + 40, mPosition.y - 5 }, mType));
+			mBullet.push_back(new CBullet({ mPosition.x + 40, mPosition.y + 10}, mType));
 			break;
 		}
 }

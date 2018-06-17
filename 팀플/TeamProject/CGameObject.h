@@ -24,6 +24,7 @@ public:
 class CItem : public CGameObject
 {
 	int mDir;
+	int mSpeed;
 public:
 	CItem();
 	~CItem();
