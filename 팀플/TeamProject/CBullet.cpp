@@ -13,9 +13,9 @@ int CBullet::GetDamage()
 {
 	return mDamage;
 }
-CBullet::CBullet(POINT p, TYPE Type)
+CBullet::CBullet(POINT p, TYPE Type, int Damage)
 {
-	mDamage = 1;
+	mDamage = Damage;
 
 	switch (Type)
 	{

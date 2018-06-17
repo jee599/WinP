@@ -17,6 +17,7 @@ class CPlayer : public CGameObject
 	bool IsBullet = false;
 	bool IsRevolution;
 	bool mAnimationCut;
+	int mDamage;
 public:
 	vector<CBullet*> mBullet;
 
@@ -31,6 +32,7 @@ public:
 	void MakeBullet();
 	void Animate();
 	void StopBullet();
-	void ScoreUp();
+	void ScoreUp() { mScore++; }
+	void DamageUp() { mDamage++; }
 };
 

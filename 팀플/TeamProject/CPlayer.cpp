@@ -8,6 +8,7 @@ CPlayer::CPlayer(TYPE Type, int Duo)
 	mMeshCount = 0;
 	mObjectSize = 40;
 	mLevel = 1;
+	mDamage = 1;
 	mScore = 0;
 	IsRevolution = false;
 	mPosition = { 30,200 + 300*Duo};
@@ -94,30 +95,24 @@ void CPlayer::MakeBullet()
 		switch (mLevel)
 		{
 		case 1:
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y- 5 }, mType));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y- 5 }, mType, mDamage));
 			break;
 		case 2:
-			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y }, mType));
-			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y - 20}, mType));
+			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y }, mType, mDamage));
+			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y - 20}, mType, mDamage));
 			break;
 		case 3:
-			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y - 20 }, mType));
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 5 }, mType));
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 10}, mType));
+			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y - 40 }, mType, mDamage));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 10 }, mType, mDamage));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 20}, mType, mDamage));
 			break;
 		}
-}
-
-void CPlayer::ScoreUp()
-{
-	mScore++;
 }
 void CPlayer::Animate()
 {
 	if (mScore > (1*mLevel) && mLevel <3)
 	{
 		mLevel++;
-		mObjectSize += 10;
 		mScore = 0;
 		IsRevolution = true;
 	}

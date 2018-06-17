@@ -83,7 +83,8 @@ void CFrameWork::Animate()
 		}
 		dynamic_cast<CPlayer*>(mPlayer)->Animate();
 		dynamic_cast<CPlayer*>(mDuo)->Animate();
-
+		for (int i = 0; i < mItemCount; ++i)
+			dynamic_cast<CItem*>(mItem[i])->Animate();
 		for (int i = 0; i < mEnemyCount; ++i)
 		{
 			int Result = dynamic_cast<CEnemy*>(mEnemy[i])->Animate();
@@ -104,6 +105,30 @@ void CFrameWork::Animate()
 
 void CFrameWork::CollCheck()
 {
+	RECT Temp;
+	for (int i = 0; i < mItemCount; ++i)
+	{
+		if (IntersectRect(&Temp, &(mItem[i]->GetRect()), &(mPlayer->GetRect())))
+		{
+			dynamic_cast<CPlayer*>(mPlayer)->DamageUp();
+			for (int j = 0; j < mItemCount; ++j)
+			{
+				delete mItem[i];
+				mItem[j] = mItem[j + 1];
+				mItemCount--;
+			}
+		}
+		if (IntersectRect(&Temp, &(mItem[i]->GetRect()), &(mDuo->GetRect())))
+		{
+			dynamic_cast<CPlayer*>(mDuo)->DamageUp();
+			for (int j = 0; j < mItemCount; ++j)
+			{
+				delete mItem[i];
+				mItem[j] = mItem[j + 1];
+				mItemCount--;
+			}
+		}
+	}
 	for (int i = 0; i < mEnemyCount; ++i)
 	{
 		auto iter = dynamic_cast<CPlayer*>(mPlayer)->mBullet.begin();

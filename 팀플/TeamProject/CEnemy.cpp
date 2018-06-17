@@ -174,7 +174,7 @@ void CEnemy::Render(HDC Buffer)
 		break;
 	case PLAY:
 		mMesh[0].Draw(Buffer, mPosition.x-mObjectSize, mPosition.y - mObjectSize, mObjectSize*2, mObjectSize*2);
-		TextOut(Buffer, mPosition.x, mPosition.y - 70, Temp, strlen(Temp));
+		mMesh[9].Draw(Buffer, mPosition.x - mObjectSize/2, mPosition.y - mObjectSize - 10, 2 * mLife, 10);
 		break;
 	case DEAD:
 		if (mEffect->Render(Buffer, mPosition))
