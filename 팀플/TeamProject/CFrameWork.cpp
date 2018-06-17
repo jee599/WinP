@@ -13,14 +13,14 @@ CFrameWork::~CFrameWork()
 
 void CFrameWork::InitialObject()
 {
-	if (!mEnemy)
-		mEnemy = new CEnemy;
+	srand(time(NULL));
+	mEnemy[mEnemyCount++] = new CEnemy;
 	if(!mScene)
 		mScene = new CScene;
 	if (!mPlayer)
-		mPlayer = new CPlayer(1);
+		mPlayer = new CPlayer(FIRE,1);
 	if (!mDuo)
-		mDuo = new CPlayer(2);
+		mDuo = new CPlayer(WATER,0);
 	GameState = TITLE;
 }
 
@@ -30,7 +30,8 @@ void CFrameWork::MouseDown(LPARAM lParam)
 	Point.x = LOWORD((int)lParam);
 	Point.y = HIWORD((int)lParam);
 
-	GameState = mScene->MouseDown(Point);
+	if (GameState == TITLE)
+		GameState = mScene->MouseDown(Point);
 }
 
 void CFrameWork::Render(HDC MainBuffer)
@@ -41,39 +42,114 @@ void CFrameWork::Render(HDC MainBuffer)
 	PatBlt(BackBuffer, 0, 0, WIDTH, HEIGHT, WHITENESS);
 
 	mScene->Render(BackBuffer,GameState);
-	
+
 	if (GameState == GAMEPLAY)
 	{
+		for (int i = 0; i < mItemCount; ++i)
+			mItem[i]->Render(BackBuffer);
+		for (int i = 0; i < mEnemyCount;++i)
+			mEnemy[i]->Render(BackBuffer);
 		mDuo->Render(BackBuffer);
-		mEnemy->Render(BackBuffer);
 		mPlayer->Render(BackBuffer);
 	}
 	
 	BitBlt(MainBuffer, 0, 0, WIDTH, HEIGHT, BackBuffer, 0, 0, SRCCOPY);
+	DeleteObject(hBitmap);
+	DeleteDC(BackBuffer);
 }
 
 void CFrameWork::KeyDown(WPARAM wParam)
-{	
-	dynamic_cast<CPlayer*>(mPlayer)->Move(wParam);
-	dynamic_cast<CPlayer*>(mDuo)->Move(wParam);
+{
+	if (GameState == GAMEPLAY)
+	{
+		dynamic_cast<CPlayer*>(mPlayer)->Move(wParam);
+		dynamic_cast<CPlayer*>(mDuo)->Move(wParam);
+	}
+}
+
+void CFrameWork::MakeFood(POINT Position)
+{
+	mItem[mItemCount++] = new CItem(Position);
 }
 
 void CFrameWork::Animate()
 {
-	dynamic_cast<CPlayer*>(mPlayer)->Animate();
-	dynamic_cast<CPlayer*>(mDuo)->Animate();
+	if (GameState == GAMEPLAY)
+	{
+		if (++Timer % 100 == 0)
+		{
+			mBossCount++;
+			mEnemy[mEnemyCount++] = new CEnemy;
+		}
+		dynamic_cast<CPlayer*>(mPlayer)->Animate();
+		dynamic_cast<CPlayer*>(mDuo)->Animate();
+
+		for (int i = 0; i < mEnemyCount; ++i)
+		{
+			int Result = dynamic_cast<CEnemy*>(mEnemy[i])->Animate();
+			if (Result == 2)
+				MakeFood(dynamic_cast<CEnemy*>(mEnemy[i])->GetPosition());
+			if (Result)
+			{
+				delete mEnemy[i];
+				for (int j = i; j < mEnemyCount; ++j)
+					mEnemy[j] = mEnemy[j + 1];
+				mEnemyCount--;
+			}
+		}
+		CollCheck();
+	}
+}
+
+void CFrameWork::CollCheck()
+{
+	for (int i = 0; i < mEnemyCount; ++i)
+	{
+		auto iter = dynamic_cast<CPlayer*>(mPlayer)->mBullet.begin();
+		for (; iter != dynamic_cast<CPlayer*>(mPlayer)->mBullet.end();)
+		{
+			if ((*iter)->CollCheck(mEnemy[i]->GetRect()))
+			{
+				delete(*iter);
+				iter = dynamic_cast<CPlayer*>(mPlayer)->mBullet.erase(iter);
+				mEnemy[i]->Collision();
+			}
+			else
+				++iter;
+		}
+		auto iter1 = dynamic_cast<CPlayer*>(mDuo)->mBullet.begin();
+		for (; iter1 != dynamic_cast<CPlayer*>(mDuo)->mBullet.end();)
+		{
+
+			if ((*iter1)->CollCheck(mEnemy[i]->GetRect()))
+			{
+				delete(*iter1);
+				iter1 = dynamic_cast<CPlayer*>(mDuo)->mBullet.erase(iter1);
+				mEnemy[i]->Collision();
+			}
+			else
+				++iter1;
+		}
+	}
 }
 
 void CFrameWork::KeyUp(WPARAM wParam)
 {
-	if (wParam == VK_RETURN)
-		dynamic_cast<CPlayer*>(mPlayer)->StopBullet();
-	if(wParam == VK_SPACE)
-		dynamic_cast<CPlayer*>(mDuo)->StopBullet();
+	if (GameState == GAMEPLAY)
+	{
+		if (wParam == VK_RETURN)
+			dynamic_cast<CPlayer*>(mPlayer)->StopBullet();
+		if (wParam == VK_SPACE)
+			dynamic_cast<CPlayer*>(mDuo)->StopBullet();
+	}
 }
 
 void CFrameWork::DestroyObject()
 {
+	for (int i = 0; i < mItemCount; ++i)
+		delete mItem[i];
+	for(int i = 0; i < mEnemyCount;++i)
+		delete mEnemy[i];
 	if (mDuo)
 		delete mDuo;
 	if (mPlayer)

@@ -5,10 +5,12 @@ class CBullet : public CGameObject
 {
 public:
 	CBullet();
-	CBullet(POINT);
+	CBullet(POINT, TYPE);
 	~CBullet();
 
 	bool Animate();
 	void Render(HDC);
+	bool CollCheck(RECT);
+
 };
 

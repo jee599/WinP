@@ -91,6 +91,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMessage, WPARAM
 
 	case WM_DESTROY:
 		delete FrameWork;
+
 		PostQuitMessage(0);
 		break;
 	}

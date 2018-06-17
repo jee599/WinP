@@ -1,19 +1,32 @@
 #include "CPlayer.h"
 
-CPlayer::CPlayer(int Type)
+CPlayer::CPlayer(TYPE Type, int Duo)
 {
 	mType = Type;
-
+	mDuoMode = Duo;
 	mDirect = STOP;
 	mMeshCount = 0;
-	mPosition = { 30, HEIGHT / 3 * mType };
-	if (Type == 1)
-		mMesh[0].Load(TEXT("fire.png"));
-	if (Type == 2)
-		mMesh[0].Load(TEXT("water.png"));
-	//mMesh[0].Load((TEXT("종이1.png")));
-	//mMesh[1].Load((TEXT("종이2.png")));
-	//mMesh[2].Load((TEXT("종이3.png")));
+	mObjectSize = 50;
+	mPosition = { 30,200 + 300*Duo};
+	switch (Type)
+	{
+	case FIRE:
+		mMesh[0].Load(TEXT("파이리1.png"));
+		mMesh[1].Load(TEXT("파이리2.png"));
+		mMesh[2].Load(TEXT("파이리3.png"));
+		break;
+	case WATER:
+		mMesh[0].Load(TEXT("꼬부기1.png"));
+		mMesh[1].Load(TEXT("꼬부기2.png"));
+		mMesh[2].Load(TEXT("꼬부기3.png"));
+		break;
+	case GRASS:
+		mMesh[0].Load(TEXT("grass.png"));
+		break;
+	case ELEC:
+		mMesh[0].Load(TEXT("elec.png"));
+		break;
+	}
 }
 
 CPlayer::~CPlayer()
@@ -25,7 +38,7 @@ CPlayer::~CPlayer()
 
 void CPlayer::Move(WPARAM wParam)
 {
-	if(mType == 1)
+	if(mDuoMode)
 	// Set Player Direction by wParam
 	switch (wParam)
 	{
@@ -44,7 +57,7 @@ void CPlayer::Move(WPARAM wParam)
 	case VK_RETURN:
 		IsBullet = true;
 	}
-	if (mType == 2)
+	else
 	{
 		switch (wParam)
 		{
@@ -77,24 +90,26 @@ void CPlayer::MakeBullet()
 		switch (mBulletNumber)
 		{
 		case 1:
-			mBullet.push_back(new CBullet(mPosition));
+			mBullet.push_back(new CBullet(mPosition, mType));
 			break;
 		case 2:
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 10}));
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 10}));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 10 }, mType));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 10}, mType));
 			break;
 		case 3:
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 12 }));
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 12 }));
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y}));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 15 }, mType));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 15 }, mType));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y }, mType));
 			break;
 		}
 }
-
 void CPlayer::Animate()
 {
-	if (mBulletCount++ % BULLETRATE == 0)
+	if (mBulletCount++ == BULLETRATE)
+	{
 		MakeBullet();
+		mBulletCount = 0;
+	}
 	// 포문 안은 어려우니 이해하려 들지 마라(vector + iterator + delete + auto)
 	// mBullet = vector<CBullet*>형식   ->  iter = CBullet* ?
 	for (auto iter = mBullet.begin(); iter != mBullet.end();)
@@ -133,6 +148,5 @@ void CPlayer::Render(HDC Buffer)
 		p->Render(Buffer);
 	if (mMeshCount == 30)
 		mMeshCount = 0;
-	mMesh[0].Draw(Buffer, mPosition.x, mPosition.y, PLAYERSIZE, PLAYERSIZE);
-	//mMesh[mMeshCount++ / 10].Draw(Buffer, mPosition.x, mPosition.y, PLAYERSIZE, PLAYERSIZE);
+	mMesh[0].Draw(Buffer, mPosition.x, mPosition.y, mObjectSize, mObjectSize);
 }

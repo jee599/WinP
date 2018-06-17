@@ -6,18 +6,22 @@
 
 class CPlayer : public CGameObject
 {
-	vector<CBullet*> mBullet;
 	int mMeshCount;
 	int mDirect;
 	int mBulletCount = 0;
 	int mBulletNumber = 1;
-	int mType;
-	
+	int mDuoMode;
+
+	int mLevel = 1;
+	TYPE mType;
 	bool IsBullet = false;
 
 public:
+	vector<CBullet*> mBullet;
+
+public:
 	CPlayer() {}
-	CPlayer(int);
+	CPlayer(TYPE,int );
 	~CPlayer();
 
 public:
