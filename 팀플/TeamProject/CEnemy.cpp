@@ -9,6 +9,7 @@ CEnemy::CEnemy()
 	mState = SPAWN;
 	mMoving = 0;
 	mDir = rand() % 4;
+	mMesh[9].Load(TEXT("Hp.png"));
 	switch (mType)
 	{
 	case 1:

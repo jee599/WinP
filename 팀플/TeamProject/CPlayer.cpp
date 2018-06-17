@@ -191,5 +191,5 @@ void CPlayer::Render(HDC Buffer)
 		mMeshCount = mObjectSize*2;
 		mAnimationCut = true;
 	}
-	mMesh[9].Draw(Buffer, mPosition.x - mObjectSize/2, mPosition.y - mObjectSize +(10*mLevel), 50, 10);
+	mMesh[9].Draw(Buffer, mPosition.x - mObjectSize/2, mPosition.y - mObjectSize - 30, 50, 10);
 }
