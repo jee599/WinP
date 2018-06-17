@@ -91,6 +91,7 @@ void CFrameWork::Animate()
 				MakeFood(dynamic_cast<CEnemy*>(mEnemy[i])->GetPosition());
 			if (Result)
 			{
+				dynamic_cast<CPlayer*>(mPlayer)->ScoreUp();
 				delete mEnemy[i];
 				for (int j = i; j < mEnemyCount; ++j)
 					mEnemy[j] = mEnemy[j + 1];
