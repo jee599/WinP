@@ -4,7 +4,7 @@
 class CGameObject
 {
 protected:
-	CImage mMesh[10];
+	CImage mMesh[15];
 	POINT mPosition;
 	int mObjectSize;
 	int mMeshCount;

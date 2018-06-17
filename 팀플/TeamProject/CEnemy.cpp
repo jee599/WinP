@@ -1,5 +1,28 @@
 #include "CEnemy.h"
 
+CEnemy::CEnemy(GAMESTATE p)
+{
+	mPosition = { WIDTH, 400 };
+	mLife = 200;
+	mType = 25;		//BOSS
+	mObjectSize = 75;
+	mState = SPAWN;
+	mMoving = 0;
+	mDir = rand() % 4;
+	mMesh[11].Load(TEXT("Hp.png"));
+	mMesh[0].Load(TEXT("비주기1.png"));
+	mMesh[1].Load(TEXT("비주기2.png"));
+	mMesh[2].Load(TEXT("비주기3.png"));
+	mMesh[3].Load(TEXT("비주기4.png"));
+	mMesh[4].Load(TEXT("비주기5.png"));
+	mMesh[5].Load(TEXT("비주기6.png"));
+	mMesh[6].Load(TEXT("비주기7.png"));
+	mMesh[7].Load(TEXT("비주기8.png"));
+	mMesh[8].Load(TEXT("비주기9.png"));
+	mMesh[9].Load(TEXT("비주기10.png"));
+	mMesh[10].Load(TEXT("비주기11.png"));
+}
+
 CEnemy::CEnemy()
 {
 	mPosition = { WIDTH, (rand () % 300) *2 + 100 };
@@ -9,7 +32,7 @@ CEnemy::CEnemy()
 	mState = SPAWN;
 	mMoving = 0;
 	mDir = rand() % 4;
-	mMesh[9].Load(TEXT("Hp.png"));
+	mMesh[11].Load(TEXT("Hp.png"));
 	switch (mType)
 	{
 	case 1:
@@ -115,7 +138,43 @@ bool CEnemy::Collision(int Damage)
 }
 int CEnemy::Animate()
 {
-	if (mState == PLAY)
+	if(mType == 25 && mState == PLAY)
+		switch (mDir)
+		{
+		case 0:
+			mPosition.x++;
+			mPosition.y++;
+			if (mMoving % 50 == 0)
+				mDir = rand() % 4;
+			if (mPosition.x > 900 || mPosition.y > 750)
+				mDir = 3;
+			break;
+		case 1:
+			mPosition.x++;
+			mPosition.y--;
+			if (mMoving % 50 == 0)
+				mDir = rand() % 4;
+			if (mPosition.x > 900 || mPosition.y < 100)
+				mDir = 2;
+			break;
+		case 2:
+			mPosition.x--;
+			mPosition.y++;
+			if (mMoving % 50 == 0)
+				mDir = rand() % 4;
+			if (mPosition.x < 400 || mPosition.y > 750)
+				mDir = 0;
+			break;
+		case 3:
+			mPosition.x--;
+			mPosition.y--;
+			if (mMoving % 50 == 0)
+				mDir = rand() % 4;
+			if (mPosition.x < 400 || mPosition.y < 100)
+				mDir = 1;
+			break;
+		}
+	else if (mState == PLAY)
 	{
 		if(mMoving++ % (mType+1) == 0)
 			switch (mDir)
@@ -158,33 +217,51 @@ int CEnemy::Animate()
 }
 void CEnemy::Render(HDC Buffer)
 {
-	char Temp[20];
-	sprintf_s(Temp,"%d", mLife);
 	switch (mState)
 	{
+	case WAIT:
+		mBossState = 2;
+		mMesh[mMoving++ / 20].Draw(Buffer, mPosition.x - mObjectSize, mPosition.y - mObjectSize, mObjectSize * 2, mObjectSize * 2);
+		if ((mMoving / 20) == 11)
+			mState = PLAY;
+		break;
 	case SPAWN:
-		if (mMoving++ < (100 + mType*10))
-			mMesh[0].Draw(Buffer, mPosition.x - mMoving - mObjectSize - 10, mPosition.y - mObjectSize, (mObjectSize + ((float)mObjectSize/120 *mMoving))/2 , (mObjectSize + ((float)mObjectSize / 120 * mMoving))/2);
+		mBossState = 1;
+		if (mMoving++ < (100 + mType * 10))
+			mMesh[0].Draw(Buffer, mPosition.x - mMoving - mObjectSize - 10, mPosition.y - mObjectSize, (mObjectSize + ((float)mObjectSize / 120 * mMoving)) / 2, (mObjectSize + ((float)mObjectSize / 120 * mMoving)) / 2);
 		else
 		{
 			mPosition.x -= mMoving;
-			mState = PLAY;
+			if (mType == 25)
+				mState = WAIT;
+			else
+				mState = PLAY;
 			mMoving = 0;
 		}
 		break;
 	case PLAY:
-		mMesh[0].Draw(Buffer, mPosition.x-mObjectSize, mPosition.y - mObjectSize, mObjectSize*2, mObjectSize*2);
-		mMesh[9].Draw(Buffer, mPosition.x - mObjectSize/2, mPosition.y - mObjectSize - 10, 2 * mLife, 10);
+		if (mType == 25)
+		{
+			mBossState = 3;
+			mMesh[10].Draw(Buffer, mPosition.x - mObjectSize, mPosition.y - mObjectSize, mObjectSize * 2, mObjectSize * 2);
+		}
+		else
+			mMesh[0].Draw(Buffer, mPosition.x-mObjectSize, mPosition.y - mObjectSize, mObjectSize*2, mObjectSize*2);
+		mMesh[11].Draw(Buffer, mPosition.x - mObjectSize/2, mPosition.y - mObjectSize - 10, 2 * mLife, 10);
 		break;
 	case DEAD:
-		if (mEffect->Render(Buffer, mPosition))
+		if (mType == 25)
+			mState = DEL;
+		if (mEffect->Render(Buffer, mPosition) && mType < 25)
 			mState = DEL;
 		break;
 	case DEL:
-		if (mType)
-			IsEnd = 1;
+		if (mType == 25)
+			IsEnd = 4;			//Boss End
+		else if (mType)
+			IsEnd = 1;			// Normal End
 		else
-			IsEnd = 2;
+			IsEnd = 2;			//ITem End
 		break;
 	}
 }

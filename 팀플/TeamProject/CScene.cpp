@@ -11,7 +11,6 @@ CScene::CScene()
 	mTitleMesh[3].Load(TEXT("종료.png"));
 	mTitleMesh[4].Load(TEXT("battle.png"));
 
-
 	//mTitleMesh[3].Load(TEXT("배경4.png"));
 
 
@@ -21,9 +20,13 @@ CScene::CScene()
 	Button[EXIT] = { 650,650,950,750 };
 	
 	// Play State Mesh
-	mPlayMesh[0].Load(TEXT("stage21.png"));
-	mPlayMesh[1].Load(TEXT("stage22.png"));
-	mPlayMesh[2].Load(TEXT("stage23.png"));
+	mPlayMesh[0].Load(TEXT("stage11.png"));
+	mPlayMesh[1].Load(TEXT("stage12.png"));
+	mPlayMesh[2].Load(TEXT("stage13.png"));
+
+	mPlayMesh[3].Load(TEXT("Stage21.png"));
+	mPlayMesh[4].Load(TEXT("stage22.png"));
+	mPlayMesh[5].Load(TEXT("stage23.png"));
 
 	memset(mMeshAnimate, 0, sizeof(mMeshAnimate));
 }
@@ -65,44 +68,35 @@ void CScene::Render(HDC Buffer, GAMESTATE State)
 		//mTitleMesh[mMeshCount++ / 15].Draw(Buffer, 0, 0, WIDTH, HEIGHT);
 		mTitleMesh[0].Draw(Buffer, 0, 0, WIDTH, HEIGHT);
 		mTitleMesh[1].Draw(Buffer, 90, 20); // Title
-<<<<<<< HEAD
 		mTitleMesh[2].Draw(Buffer, 75, 655); // Start
 		mTitleMesh[3].Draw(Buffer, 700, 650); // Exit
 		mTitleMesh[4].Draw(Buffer, 400, 670,250,75 ); // Battle
-
-
-
-
-		//mTitleMesh[0].Draw(Buffer, 0, 0, WIDTH, HEIGHT);
-		//mTitleMesh[1].Draw(Buffer, 325, 70, 400, 200);
-		//mTitleMesh[2].Draw(Buffer, 200, 450, 300, 100);
-		//mTitleMesh[3].Draw(Buffer, 500 ,500, 300, 50);
-=======
-		mTitleMesh[2].Draw(Buffer, 120, 650); // Start
-		mTitleMesh[3].Draw(Buffer, 650, 650); // Exit
->>>>>>> 6795a473a1232f7efecc084497190f624c87d3db
-
 	}
 
 	if (State == CHANGE)
 	{
 
 	}
-	if (State == GAMEPLAY)
+	if (State == GAMEPLAY || State == BOSS)
 	{
-		mPlayMesh[0].Draw(Buffer, mMeshAnimate[0] + mMeshAnimate[0] % 2, 0, WIDTH, 400);
-		mPlayMesh[0].Draw(Buffer, mMeshAnimate[0] + WIDTH + mMeshAnimate[0] % 2, 0, WIDTH, 400);
+		int Index;
+		if (State == GAMEPLAY)
+			Index = 0;
+		if (State == BOSS)
+			Index = 3;
+		mPlayMesh[Index].Draw(Buffer, mMeshAnimate[0] + mMeshAnimate[0] % 2, 0, WIDTH, 400);
+		mPlayMesh[Index].Draw(Buffer, mMeshAnimate[0] + WIDTH + mMeshAnimate[0] % 2, 0, WIDTH, 400);
 		if (mTimer++ % 5 == 0)
 			mMeshAnimate[0]--;
 		if (mMeshAnimate[0] < -WIDTH)
 			mMeshAnimate[0] = 0;
-		mPlayMesh[1].Draw(Buffer, mMeshAnimate[1] + mMeshAnimate[1] % 2, 0 , WIDTH, 800);
-		mPlayMesh[1].Draw(Buffer, mMeshAnimate[1] + WIDTH + mMeshAnimate[1] % 2, 0, WIDTH, 800);
+		mPlayMesh[Index+1].Draw(Buffer, mMeshAnimate[1] + mMeshAnimate[1] % 2, 0 , WIDTH, 800);
+		mPlayMesh[Index+1].Draw(Buffer, mMeshAnimate[1] + WIDTH + mMeshAnimate[1] % 2, 0, WIDTH, 800);
 		mMeshAnimate[1]--;
 		if (mMeshAnimate[1] < -WIDTH)
 			mMeshAnimate[1] = 0;
-		mPlayMesh[2].Draw(Buffer, mMeshAnimate[2] + mMeshAnimate[2] % 2, 0, WIDTH, 800);
-		mPlayMesh[2].Draw(Buffer, mMeshAnimate[2] + WIDTH + mMeshAnimate[2] % 2, 0, WIDTH, 800);
+		mPlayMesh[Index+2].Draw(Buffer, mMeshAnimate[2] + mMeshAnimate[2] % 2, 0, WIDTH, 800);
+		mPlayMesh[Index+2].Draw(Buffer, mMeshAnimate[2] + WIDTH + mMeshAnimate[2] % 2, 0, WIDTH, 800);
 		mMeshAnimate[2] -= 4;
 		if (mMeshAnimate[2] < -WIDTH)
 			mMeshAnimate[2] = 0;

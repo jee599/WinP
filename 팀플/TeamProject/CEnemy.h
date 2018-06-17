@@ -6,12 +6,13 @@ class CEnemy : public CGameObject
 {
 	int mLife;
 	CEffect* mEffect;
-	int IsEnd = 0;
 	int mMoving;
 	int mType;
 	int mDir;
+	int IsEnd = 0;
 public:
 	CEnemy();
+	CEnemy(GAMESTATE);
 	~CEnemy();
 
 	void Render(HDC);
@@ -20,6 +21,6 @@ public:
 
 public:
 	ENEMYSTATE mState;
-
+	int mBossState = 1;
 };
 
