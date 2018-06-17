@@ -16,8 +16,8 @@ CPlayer::CPlayer(TYPE Type, int Duo)
 	switch (Type)
 	{
 	case FIRE:
-		mMesh[0].Load(TEXT("파이리1.png"));
-		mMesh[1].Load(TEXT("파이리2.png"));
+		mMesh[0].Load(TEXT("피카츄1.png"));
+		mMesh[1].Load(TEXT("피카츄2.png"));
 		mMesh[2].Load(TEXT("파이리3.png"));
 		break;
 	case WATER:
