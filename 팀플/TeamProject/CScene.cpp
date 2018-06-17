@@ -7,8 +7,10 @@ CScene::CScene()
 	mTitleMesh[0].Load(TEXT("메인화면.png"));
 
 	mTitleMesh[1].Load(TEXT("제목1.png"));
-	mTitleMesh[2].Load(TEXT("시작.png"));
+	mTitleMesh[2].Load(TEXT("adventure.png"));
 	mTitleMesh[3].Load(TEXT("종료.png"));
+	mTitleMesh[4].Load(TEXT("battle.png"));
+
 
 	//mTitleMesh[3].Load(TEXT("배경4.png"));
 
@@ -63,9 +65,9 @@ void CScene::Render(HDC Buffer, GAMESTATE State)
 		//mTitleMesh[mMeshCount++ / 15].Draw(Buffer, 0, 0, WIDTH, HEIGHT);
 		mTitleMesh[0].Draw(Buffer, 0, 0, WIDTH, HEIGHT);
 		mTitleMesh[1].Draw(Buffer, 90, 20); // Title
-		mTitleMesh[2].Draw(Buffer, 120, 650); // Start
-		mTitleMesh[3].Draw(Buffer, 650, 650); // Exit
-
+		mTitleMesh[2].Draw(Buffer, 75, 655); // Start
+		mTitleMesh[3].Draw(Buffer, 700, 650); // Exit
+		mTitleMesh[4].Draw(Buffer, 400, 670,250,75 ); // Battle
 
 
 

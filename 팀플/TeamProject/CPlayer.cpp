@@ -6,7 +6,7 @@ CPlayer::CPlayer(TYPE Type, int Duo)
 	mDuoMode = Duo;
 	mDirect = STOP;
 	mMeshCount = 0;
-	mObjectSize = 40;
+	mObjectSize = 25;
 	mLevel = 1;
 	mDamage = 1;
 	mScore = 0;
@@ -113,6 +113,7 @@ void CPlayer::Animate()
 	if (mScore > (1*mLevel) && mLevel <3)
 	{
 		mLevel++;
+		mObjectSize += 5;
 		mScore = 0;
 		IsRevolution = true;
 	}
