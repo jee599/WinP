@@ -25,8 +25,9 @@ void CFrameWork::InitialObject()
 	mEnemyCount = 0;
 	mItemCount = 0;
 
+	IsBoss = false;
 	IsInit = true;
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	mEnemyCount = 0;
 	mEnemy[mEnemyCount++] = new CEnemy;
 	mPlayer = new CPlayer(FIRE, 1);
@@ -67,6 +68,13 @@ void CFrameWork::Render(HDC MainBuffer)
 	{
 		if (!IsBoss)
 		{
+			auto iter = dynamic_cast<CPlayer*>(mPlayer)->mBullet.begin();
+			for (; iter != dynamic_cast<CPlayer*>(mPlayer)->mBullet.end();)
+			{
+				delete(*iter);
+				iter = dynamic_cast<CPlayer*>(mPlayer)->mBullet.erase(iter);
+			}
+
 			if (mItemCount)
 				for (int i = 0; i < mItemCount; ++i)
 					delete mItem[i];
@@ -127,7 +135,6 @@ void CFrameWork::Animate()
 		dynamic_cast<CPlayer*>(mDuo)->Animate();
 		int Result = dynamic_cast<CEnemy*>(mEnemy[0])->Animate();
 		if (Result == 4)
-
 		{
 			IsInit = true;
 			GameState = TITLE;
@@ -155,15 +162,12 @@ void CFrameWork::Animate()
 		dynamic_cast<CPlayer*>(mDuo)->Animate();
 		for (int i = 0; i < mItemCount; ++i)
 			dynamic_cast<CItem*>(mItem[i])->Animate();
-		if (mBossCount > 10)
+		if (mBossCount > 15)
 		{
 			GameState = BOSS;
 		}
 		if (++Timer % 100 == 0)
-		{
-			mBossCount++;
 			mEnemy[mEnemyCount++] = new CEnemy;
-		}
 		for (int i = 0; i < mEnemyCount; ++i)
 		{
 			int Result = dynamic_cast<CEnemy*>(mEnemy[i])->Animate();
@@ -173,6 +177,7 @@ void CFrameWork::Animate()
 			{
 				dynamic_cast<CPlayer*>(mPlayer)->ScoreUp();
 				delete mEnemy[i];
+				mBossCount++;
 				for (int j = i; j < mEnemyCount; ++j)
 					mEnemy[j] = mEnemy[j + 1];
 				mEnemyCount--;
@@ -190,9 +195,9 @@ void CFrameWork::CollCheck()
 		if (IntersectRect(&Temp, &(mItem[i]->GetRect()), &(mPlayer->GetRect())))
 		{
 			dynamic_cast<CPlayer*>(mPlayer)->DamageUp();
-			for (int j = 0; j < mItemCount; ++j)
+			delete mItem[i];
+			for (int j = i; j < mItemCount; ++j)
 			{
-				delete mItem[i];
 				mItem[j] = mItem[j + 1];
 				mItemCount--;
 			}
@@ -200,9 +205,9 @@ void CFrameWork::CollCheck()
 		else if (IntersectRect(&Temp, &(mItem[i]->GetRect()), &(mDuo->GetRect())))
 		{
 			dynamic_cast<CPlayer*>(mDuo)->DamageUp();
-			for (int j = 0; j < mItemCount; ++j)
+			delete mItem[i];
+			for (int j = i; j < mItemCount; ++j)
 			{
-				delete mItem[i];
 				mItem[j] = mItem[j + 1];
 				mItemCount--;
 			}
@@ -217,11 +222,6 @@ void CFrameWork::CollCheck()
 			{
 				if (dynamic_cast<CEnemy*>(mEnemy[i])->Collision((*iter)->GetDamage()))
 					break;
-			/*	if (i == 0 && GameState == BOSS)
-				{
-					GameState = TITLE;
-					IsInit = true;
-				}*/
 				delete(*iter);
 				iter = dynamic_cast<CPlayer*>(mPlayer)->mBullet.erase(iter);
 			}
@@ -236,11 +236,6 @@ void CFrameWork::CollCheck()
 			{
 				if (dynamic_cast<CEnemy*>(mEnemy[i])->Collision((*iter1)->GetDamage()))
 					break;
-				/*if (i == 0 && GameState == BOSS)
-				{
-					IsInit = true;
-					GameState = TITLE;
-				}*/
 				delete(*iter1);
 				iter1 = dynamic_cast<CPlayer*>(mDuo)->mBullet.erase(iter1);
 			}

@@ -252,13 +252,13 @@ void CEnemy::Render(HDC Buffer)
 	case DEAD:
 		if (mType == 25)
 			mState = DEL;
-		if (mEffect->Render(Buffer, mPosition) && mType < 25)
+		else if (mEffect->Render(Buffer, mPosition))
 			mState = DEL;
 		break;
 	case DEL:
 		if (mType == 25)
 			IsEnd = 4;			//Boss End
-		else if (mType)
+		else if (rand()% 10 > 2)
 			IsEnd = 1;			// Normal End
 		else
 			IsEnd = 2;			//ITem End

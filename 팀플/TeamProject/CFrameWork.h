@@ -10,7 +10,7 @@ class CFrameWork
 	CGameObject* mPlayer;			// 플레이어
 	CGameObject* mDuo;				// 2인용
 	CGameObject* mEnemy[100];			// 적
-	CGameObject* mItem[20];
+	CGameObject* mItem[100];
 	CGameObject* mBoss;
 	CScene* mScene;					// 씬
 	
