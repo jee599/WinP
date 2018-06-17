@@ -22,10 +22,10 @@ CPlayer::CPlayer(TYPE Type, int Duo)
 		mMesh[2].Load(TEXT("²¿ºÎ±â3.png"));
 		break;
 	case GRASS:
-		mMesh[0].Load(TEXT("grass.png"));
+		mMesh[0].Load(TEXT("ÀÌ»óÇØ¾¾1.png"));
 		break;
 	case ELEC:
-		mMesh[0].Load(TEXT("elec.png"));
+		mMesh[0].Load(TEXT("ÇÇÄ«Ãò1.png"));
 		break;
 	}
 }

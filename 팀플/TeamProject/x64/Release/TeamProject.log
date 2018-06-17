@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+﻿  CScene.cpp
+=======
 ﻿  00.Main.cpp
   CBullet.cpp
   CEffect.cpp
@@ -7,6 +10,7 @@ c:\users\지수\documents\github\winp\팀플\teamproject\cframework.cpp(16): war
   CGameObject.cpp
   CPlayer.cpp
   CScene.cpp
+>>>>>>> dec8be605747b959a8f64af6d49a290104ed733a
   코드를 생성하고 있습니다.
   334 of 338 functions (98.8%) were compiled, the rest were copied from previous compilation.
     30 functions were new in current compilation
