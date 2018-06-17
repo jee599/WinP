@@ -5,11 +5,13 @@ CScene::CScene()
 	mMeshCount = 0;
 	// Main State Mesh
 	mTitleMesh[0].Load(TEXT("메인화면.png"));
+
 	mTitleMesh[1].Load(TEXT("제목1.png"));
 	mTitleMesh[2].Load(TEXT("시작.png"));
 	mTitleMesh[3].Load(TEXT("종료.png"));
 
 	//mTitleMesh[3].Load(TEXT("배경4.png"));
+
 
 	// Button
 	Button[CHANGE] = { 646,606,741,670 };
@@ -55,6 +57,7 @@ void CScene::Render(HDC Buffer, GAMESTATE State)
 {
 	if (State == TITLE)
 	{
+
 		if (mMeshCount == 60)
 			mMeshCount = 0;
 		//mTitleMesh[mMeshCount++ / 15].Draw(Buffer, 0, 0, WIDTH, HEIGHT);
@@ -65,6 +68,12 @@ void CScene::Render(HDC Buffer, GAMESTATE State)
 
 
 
+
+
+		//mTitleMesh[0].Draw(Buffer, 0, 0, WIDTH, HEIGHT);
+		//mTitleMesh[1].Draw(Buffer, 325, 70, 400, 200);
+		//mTitleMesh[2].Draw(Buffer, 200, 450, 300, 100);
+		//mTitleMesh[3].Draw(Buffer, 500 ,500, 300, 50);
 
 	}
 
