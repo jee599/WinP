@@ -65,6 +65,7 @@ void CScene::Render(HDC Buffer, GAMESTATE State)
 		mTitleMesh[1].Draw(Buffer, 90, 20); // Title
 		mTitleMesh[2].Draw(Buffer, 120, 650); // Start
 		mTitleMesh[3].Draw(Buffer, 650, 650); // Exit
+
 	}
 
 	if (State == CHANGE)
