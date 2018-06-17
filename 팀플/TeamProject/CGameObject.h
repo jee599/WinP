@@ -13,9 +13,8 @@ public:
 	~CGameObject();
 public:
 	virtual void Render(HDC);
-	virtual void Collision() {};
 	RECT GetRect() {
-		return { mPosition.x - mObjectSize/2 + 2, mPosition.y - mObjectSize/2 + 2,mPosition.x + mObjectSize/2 - 2,mPosition.y + mObjectSize/2 - 2};
+		return { mPosition.x - mObjectSize/2 , mPosition.y - mObjectSize/2 ,mPosition.x + mObjectSize/2 ,mPosition.y + mObjectSize/2 };
 	}
 
 	POINT GetPosition();

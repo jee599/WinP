@@ -110,9 +110,10 @@ void CFrameWork::CollCheck()
 		{
 			if ((*iter)->CollCheck(mEnemy[i]->GetRect()))
 			{
+				if (dynamic_cast<CEnemy*>(mEnemy[i])->Collision((*iter)->GetDamage()))
+					break;
 				delete(*iter);
 				iter = dynamic_cast<CPlayer*>(mPlayer)->mBullet.erase(iter);
-				mEnemy[i]->Collision();
 			}
 			else
 				++iter;
@@ -123,9 +124,10 @@ void CFrameWork::CollCheck()
 
 			if ((*iter1)->CollCheck(mEnemy[i]->GetRect()))
 			{
+				if (dynamic_cast<CEnemy*>(mEnemy[i])->Collision((*iter1)->GetDamage()))
+					break; 
 				delete(*iter1);
 				iter1 = dynamic_cast<CPlayer*>(mDuo)->mBullet.erase(iter1);
-				mEnemy[i]->Collision();
 			}
 			else
 				++iter1;

@@ -9,7 +9,6 @@ class CPlayer : public CGameObject
 	int mMeshCount;
 	int mDirect;
 	int mBulletCount = 0;
-	int mBulletNumber = 1;
 	int mDuoMode;
 
 	int mLevel = 1;

@@ -9,9 +9,14 @@ CBullet::~CBullet()
 	for (int i = 0; i < 10; ++i)
 		mMesh[i].Destroy();
 }
-
+int CBullet::GetDamage()
+{
+	return mDamage;
+}
 CBullet::CBullet(POINT p, TYPE Type)
 {
+	mDamage = 1;
+
 	switch (Type)
 	{
 	case FIRE:

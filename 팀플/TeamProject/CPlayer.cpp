@@ -6,8 +6,8 @@ CPlayer::CPlayer(TYPE Type, int Duo)
 	mDuoMode = Duo;
 	mDirect = STOP;
 	mMeshCount = 0;
-	mBulletNumber = 2;
-	mObjectSize = 50;
+	mObjectSize = 40;
+	mLevel = 1;
 	mPosition = { 30,200 + 300*Duo};
 	switch (Type)
 	{
@@ -88,14 +88,14 @@ void CPlayer::MakeBullet()
 {
 	// Make Bullet with Player Position
 	if(IsBullet)
-		switch (mBulletNumber)
+		switch (mLevel)
 		{
 		case 1:
 			mBullet.push_back(new CBullet({ mPosition.x + 40, mPosition.y + 10 }, mType));
 			break;
 		case 2:
-			mBullet.push_back(new CBullet({ mPosition.x + 40, mPosition.y + 20 }, mType));
-			mBullet.push_back(new CBullet({ mPosition.x + 40, mPosition.y}, mType));
+			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y }, mType));
+			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y - 20}, mType));
 			break;
 		case 3:
 			mBullet.push_back(new CBullet({ mPosition.x + 40, mPosition.y + 25 }, mType));
@@ -149,5 +149,6 @@ void CPlayer::Render(HDC Buffer)
 		p->Render(Buffer);
 	if (mMeshCount == 30)
 		mMeshCount = 0;
-	mMesh[0].Draw(Buffer, mPosition.x, mPosition.y, mObjectSize, mObjectSize);
+	mMesh[mLevel-1].Draw(Buffer, mPosition.x-mObjectSize, mPosition.y-mObjectSize, mObjectSize*2, mObjectSize*2);
+	//Rectangle(Buffer, mPosition.x - mObjectSize, mPosition.y - mObjectSize, mPosition.x + mObjectSize, mPosition.y + mObjectSize);
 }
