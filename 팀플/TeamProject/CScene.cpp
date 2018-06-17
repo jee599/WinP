@@ -65,6 +65,7 @@ void CScene::Render(HDC Buffer, GAMESTATE State)
 		//mTitleMesh[mMeshCount++ / 15].Draw(Buffer, 0, 0, WIDTH, HEIGHT);
 		mTitleMesh[0].Draw(Buffer, 0, 0, WIDTH, HEIGHT);
 		mTitleMesh[1].Draw(Buffer, 90, 20); // Title
+<<<<<<< HEAD
 		mTitleMesh[2].Draw(Buffer, 75, 655); // Start
 		mTitleMesh[3].Draw(Buffer, 700, 650); // Exit
 		mTitleMesh[4].Draw(Buffer, 400, 670,250,75 ); // Battle
@@ -76,6 +77,10 @@ void CScene::Render(HDC Buffer, GAMESTATE State)
 		//mTitleMesh[1].Draw(Buffer, 325, 70, 400, 200);
 		//mTitleMesh[2].Draw(Buffer, 200, 450, 300, 100);
 		//mTitleMesh[3].Draw(Buffer, 500 ,500, 300, 50);
+=======
+		mTitleMesh[2].Draw(Buffer, 120, 650); // Start
+		mTitleMesh[3].Draw(Buffer, 650, 650); // Exit
+>>>>>>> 6795a473a1232f7efecc084497190f624c87d3db
 
 	}
 

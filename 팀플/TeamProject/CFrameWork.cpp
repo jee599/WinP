@@ -118,7 +118,7 @@ void CFrameWork::CollCheck()
 				mItemCount--;
 			}
 		}
-		if (IntersectRect(&Temp, &(mItem[i]->GetRect()), &(mDuo->GetRect())))
+		else if (IntersectRect(&Temp, &(mItem[i]->GetRect()), &(mDuo->GetRect())))
 		{
 			dynamic_cast<CPlayer*>(mDuo)->DamageUp();
 			for (int j = 0; j < mItemCount; ++j)

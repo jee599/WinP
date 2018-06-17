@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 ﻿  CScene.cpp
   TeamProject.vcxproj -> C:\Users\지수\Documents\GitHub\WinP\팀플\x64\Debug\TeamProject.exe
+=======
+﻿  CPlayer.cpp
+  TeamProject.vcxproj -> C:\Users\지동\Documents\GitHub\WinP\팀플\x64\Debug\TeamProject.exe
+>>>>>>> 6795a473a1232f7efecc084497190f624c87d3db
