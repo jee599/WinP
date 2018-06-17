@@ -9,13 +9,15 @@ class CPlayer : public CGameObject
 	int mMeshCount;
 	int mDirect;
 	int mBulletCount = 0;
-	int mBulletNumber = 1;
 	int mDuoMode;
 
-	int mLevel = 1;
+	int mScore;
+	int mLevel;
 	TYPE mType;
 	bool IsBullet = false;
-
+	bool IsRevolution;
+	bool mAnimationCut;
+	int mDamage;
 public:
 	vector<CBullet*> mBullet;
 
@@ -30,5 +32,7 @@ public:
 	void MakeBullet();
 	void Animate();
 	void StopBullet();
+	void ScoreUp() { mScore++; }
+	void DamageUp() { mDamage++; }
 };
 

@@ -6,7 +6,6 @@ class CEnemy : public CGameObject
 {
 	int mLife;
 	CEffect* mEffect;
-	ENEMYSTATE mState;
 	int IsEnd = 0;
 	int mMoving;
 	int mType;
@@ -16,7 +15,11 @@ public:
 	~CEnemy();
 
 	void Render(HDC);
-	void Collision();
+	bool Collision(int);
 	int Animate();
+
+public:
+	ENEMYSTATE mState;
+
 };
 

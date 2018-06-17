@@ -9,6 +9,7 @@ CEnemy::CEnemy()
 	mState = SPAWN;
 	mMoving = 0;
 	mDir = rand() % 4;
+	mMesh[9].Load(TEXT("Hp.png"));
 	switch (mType)
 	{
 	case 1:
@@ -96,14 +97,20 @@ CEnemy::~CEnemy()
 	if (mEffect)
 		delete mEffect;
 }
-void CEnemy::Collision()
+bool CEnemy::Collision(int Damage)
 {
 	if (mState == PLAY)
 	{
-		if (mLife > 0)
-			mLife--;
+		if (mLife > Damage)
+		{
+			mLife -= Damage;
+			return false;
+		}
 		else
+		{
 			mState = DEAD;
+			return true;
+		}
 	}
 }
 int CEnemy::Animate()
@@ -157,7 +164,7 @@ void CEnemy::Render(HDC Buffer)
 	{
 	case SPAWN:
 		if (mMoving++ < (100 + mType*10))
-			mMesh[0].Draw(Buffer, mPosition.x - mMoving, mPosition.y, (mObjectSize + ((float)mObjectSize/120 *mMoving))/2 , (mObjectSize + ((float)mObjectSize / 120 * mMoving))/2);
+			mMesh[0].Draw(Buffer, mPosition.x - mMoving - mObjectSize - 10, mPosition.y - mObjectSize, (mObjectSize + ((float)mObjectSize/120 *mMoving))/2 , (mObjectSize + ((float)mObjectSize / 120 * mMoving))/2);
 		else
 		{
 			mPosition.x -= mMoving;
@@ -166,8 +173,8 @@ void CEnemy::Render(HDC Buffer)
 		}
 		break;
 	case PLAY:
-		mMesh[0].Draw(Buffer, mPosition.x, mPosition.y, mObjectSize*2, mObjectSize*2);
-		TextOut(Buffer, mPosition.x + 50, mPosition.y, Temp, strlen(Temp));
+		mMesh[0].Draw(Buffer, mPosition.x-mObjectSize, mPosition.y - mObjectSize, mObjectSize*2, mObjectSize*2);
+		mMesh[9].Draw(Buffer, mPosition.x - mObjectSize/2, mPosition.y - mObjectSize - 10, 2 * mLife, 10);
 		break;
 	case DEAD:
 		if (mEffect->Render(Buffer, mPosition))

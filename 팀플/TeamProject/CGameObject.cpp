@@ -29,18 +29,26 @@ void CItem::Animate()
 	case 0:
 		mPosition.x += mSpeed;
 		mPosition.y += mSpeed;
+		if (mPosition.x > 950 || mPosition.y > 750)
+			mDir = 3;
 		break;
 	case 1:
 		mPosition.x += mSpeed;
-		mPosition.y += mSpeed;
+		mPosition.y -= mSpeed;
+		if (mPosition.x > 950 || mPosition.y < 50)
+			mDir = 2;
 		break;
 	case 2:
-		mPosition.x += mSpeed;
+		mPosition.x -= mSpeed;
 		mPosition.y += mSpeed;
+		if (mPosition.x < 50 || mPosition.y > 750)
+			mDir = 0;
 		break;
 	case 3:
-		mPosition.x += mSpeed;
-		mPosition.y += mSpeed;
+		mPosition.x -= mSpeed;
+		mPosition.y -= mSpeed;
+		if (mPosition.x < 50 || mPosition.y < 50)
+			mDir = 1;
 		break;
 	}
 }

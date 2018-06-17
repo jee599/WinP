@@ -83,7 +83,8 @@ void CFrameWork::Animate()
 		}
 		dynamic_cast<CPlayer*>(mPlayer)->Animate();
 		dynamic_cast<CPlayer*>(mDuo)->Animate();
-
+		for (int i = 0; i < mItemCount; ++i)
+			dynamic_cast<CItem*>(mItem[i])->Animate();
 		for (int i = 0; i < mEnemyCount; ++i)
 		{
 			int Result = dynamic_cast<CEnemy*>(mEnemy[i])->Animate();
@@ -91,6 +92,7 @@ void CFrameWork::Animate()
 				MakeFood(dynamic_cast<CEnemy*>(mEnemy[i])->GetPosition());
 			if (Result)
 			{
+				dynamic_cast<CPlayer*>(mPlayer)->ScoreUp();
 				delete mEnemy[i];
 				for (int j = i; j < mEnemyCount; ++j)
 					mEnemy[j] = mEnemy[j + 1];
@@ -103,6 +105,30 @@ void CFrameWork::Animate()
 
 void CFrameWork::CollCheck()
 {
+	RECT Temp;
+	for (int i = 0; i < mItemCount; ++i)
+	{
+		if (IntersectRect(&Temp, &(mItem[i]->GetRect()), &(mPlayer->GetRect())))
+		{
+			dynamic_cast<CPlayer*>(mPlayer)->DamageUp();
+			for (int j = 0; j < mItemCount; ++j)
+			{
+				delete mItem[i];
+				mItem[j] = mItem[j + 1];
+				mItemCount--;
+			}
+		}
+		if (IntersectRect(&Temp, &(mItem[i]->GetRect()), &(mDuo->GetRect())))
+		{
+			dynamic_cast<CPlayer*>(mDuo)->DamageUp();
+			for (int j = 0; j < mItemCount; ++j)
+			{
+				delete mItem[i];
+				mItem[j] = mItem[j + 1];
+				mItemCount--;
+			}
+		}
+	}
 	for (int i = 0; i < mEnemyCount; ++i)
 	{
 		auto iter = dynamic_cast<CPlayer*>(mPlayer)->mBullet.begin();
@@ -110,9 +136,10 @@ void CFrameWork::CollCheck()
 		{
 			if ((*iter)->CollCheck(mEnemy[i]->GetRect()))
 			{
+				if (dynamic_cast<CEnemy*>(mEnemy[i])->Collision((*iter)->GetDamage()))
+					break;
 				delete(*iter);
 				iter = dynamic_cast<CPlayer*>(mPlayer)->mBullet.erase(iter);
-				mEnemy[i]->Collision();
 			}
 			else
 				++iter;
@@ -123,9 +150,10 @@ void CFrameWork::CollCheck()
 
 			if ((*iter1)->CollCheck(mEnemy[i]->GetRect()))
 			{
+				if (dynamic_cast<CEnemy*>(mEnemy[i])->Collision((*iter1)->GetDamage()))
+					break; 
 				delete(*iter1);
 				iter1 = dynamic_cast<CPlayer*>(mDuo)->mBullet.erase(iter1);
-				mEnemy[i]->Collision();
 			}
 			else
 				++iter1;

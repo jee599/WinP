@@ -6,9 +6,13 @@ CPlayer::CPlayer(TYPE Type, int Duo)
 	mDuoMode = Duo;
 	mDirect = STOP;
 	mMeshCount = 0;
-	mBulletNumber = 2;
-	mObjectSize = 50;
+	mObjectSize = 40;
+	mLevel = 1;
+	mDamage = 1;
+	mScore = 0;
+	IsRevolution = false;
 	mPosition = { 30,200 + 300*Duo};
+	mMesh[9].Load(TEXT("Hp.png"));
 	switch (Type)
 	{
 	case FIRE:
@@ -88,24 +92,30 @@ void CPlayer::MakeBullet()
 {
 	// Make Bullet with Player Position
 	if(IsBullet)
-		switch (mBulletNumber)
+		switch (mLevel)
 		{
 		case 1:
-			mBullet.push_back(new CBullet({ mPosition.x + 40, mPosition.y + 10 }, mType));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y- 5 }, mType, mDamage));
 			break;
 		case 2:
-			mBullet.push_back(new CBullet({ mPosition.x + 40, mPosition.y + 20 }, mType));
-			mBullet.push_back(new CBullet({ mPosition.x + 40, mPosition.y}, mType));
+			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y }, mType, mDamage));
+			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y - 20}, mType, mDamage));
 			break;
 		case 3:
-			mBullet.push_back(new CBullet({ mPosition.x + 40, mPosition.y + 25 }, mType));
-			mBullet.push_back(new CBullet({ mPosition.x + 40, mPosition.y - 5 }, mType));
-			mBullet.push_back(new CBullet({ mPosition.x + 40, mPosition.y + 10}, mType));
+			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y - 40 }, mType, mDamage));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 10 }, mType, mDamage));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 20}, mType, mDamage));
 			break;
 		}
 }
 void CPlayer::Animate()
 {
+	if (mScore > (1*mLevel) && mLevel <3)
+	{
+		mLevel++;
+		mScore = 0;
+		IsRevolution = true;
+	}
 	if (mBulletCount++ == BULLETRATE)
 	{
 		MakeBullet();
@@ -123,21 +133,22 @@ void CPlayer::Animate()
 			++ iter;
 			
 	// Moving Player by Direct
-	switch (mDirect)
-	{
-	case DOWN:
-		mPosition.y += PLAYERSPEED;
-		break;
-	case UP:
-		mPosition.y -= PLAYERSPEED;
-		break;
-	case LEFT:
-		mPosition.x -= PLAYERSPEED;
-		break;
-	case RIGHT:
-		mPosition.x += PLAYERSPEED;
-		break;
-	}
+	if(!IsRevolution)
+		switch (mDirect)
+		{
+		case DOWN:
+			mPosition.y += PLAYERSPEED;
+			break;
+		case UP:
+			mPosition.y -= PLAYERSPEED;
+			break;
+		case LEFT:
+			mPosition.x -= PLAYERSPEED;
+			break;
+		case RIGHT:
+			mPosition.x += PLAYERSPEED;
+			break;
+		}
 	if (mPosition.x >= WIDTH || mPosition.x <= 0 || mPosition.y >= HEIGHT || mPosition.y <= 0)
 		mDirect += 2;
 	if (mDirect > 4)
@@ -147,7 +158,33 @@ void CPlayer::Render(HDC Buffer)
 {
 	for (auto p : mBullet)
 		p->Render(Buffer);
-	if (mMeshCount == 30)
-		mMeshCount = 0;
-	mMesh[0].Draw(Buffer, mPosition.x, mPosition.y, mObjectSize, mObjectSize);
+	if (IsRevolution)
+	{
+		if (mAnimationCut)
+		{
+			if ((mMeshCount % 10) < 5)
+				mMesh[mLevel - 2].Draw(Buffer, mPosition.x - mObjectSize, mPosition.y - mObjectSize, mMeshCount, mMeshCount);
+			else
+				mMesh[mLevel - 2].Draw(Buffer, mPosition.x - mObjectSize, mPosition.y - mObjectSize, mMeshCount / 2, mMeshCount / 2);
+			if (mMeshCount-- < 10)
+				mAnimationCut = false;
+		}
+		else
+		{
+			if ((mMeshCount % 10) < 5)
+				mMesh[mLevel - 2].Draw(Buffer, mPosition.x - mObjectSize, mPosition.y - mObjectSize, mMeshCount, mMeshCount);
+			else
+				mMesh[mLevel - 2].Draw(Buffer, mPosition.x - mObjectSize, mPosition.y - mObjectSize, mMeshCount / 2, mMeshCount / 2);
+			mMeshCount++;
+			if (mMeshCount == mObjectSize*2)
+				IsRevolution = false;
+		}
+	}
+	else
+	{
+		mMesh[mLevel - 1].Draw(Buffer, mPosition.x - mObjectSize, mPosition.y - mObjectSize, mObjectSize * 2, mObjectSize * 2);
+		mMeshCount = mObjectSize*2;
+		mAnimationCut = true;
+	}
+	mMesh[9].Draw(Buffer, mPosition.x - mObjectSize/2, mPosition.y - mObjectSize - 30, 50, 10);
 }
