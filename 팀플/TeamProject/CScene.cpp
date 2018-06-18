@@ -30,20 +30,24 @@ CScene::~CScene()
 	mPlayMesh->Destroy();
 }
 
-GAMESTATE CScene::MouseDown(POINT Point)
+GAMESTATE CScene::MouseDown(POINT Point, GAMESTATE State)
 {
-	if (PtInRect(&Button[BATTLE], Point))
-		return BATTLE;
-	if (PtInRect(&Button[GAMEPLAY], Point))
+	if (State == TITLE)
 	{
-		PlaySound(NULL, NULL, NULL);
-		PlaySound("Boss.wav", NULL, SND_ASYNC | SND_LOOP);
-		return GAMEPLAY;
-	}
+		if (PtInRect(&Button[BATTLE], Point))
+			return BATTLE;
+		if (PtInRect(&Button[GAMEPLAY], Point))
+		{
+			PlaySound(NULL, NULL, NULL);
+			PlaySound("Boss.wav", NULL, SND_ASYNC | SND_LOOP);
+			return GAMEPLAY;
+		}
 
-	if (PtInRect(&Button[EXIT], Point))
-		return EXIT;
+		if (PtInRect(&Button[EXIT], Point))
+			return EXIT;
+	}
 	return TITLE;
+
 }
 
 void CScene::Animation(ANIMATION State)
@@ -60,12 +64,10 @@ void CScene::Render(HDC Buffer, GAMESTATE State)
 {
 	if (State == TITLE)
 	{
-
 		if (mMeshCount == 60)
 			mMeshCount = 0;
 		//mTitleMesh[mMeshCount++ / 15].Draw(Buffer, 0, 0, WIDTH, HEIGHT);
 		mTitleMesh[0].Draw(Buffer, 0, 0, WIDTH, HEIGHT);
-
 	}
 
 	if (State == BATTLE)

@@ -15,6 +15,6 @@ public:
 public:
 	void Render(HDC, GAMESTATE);
 	void Animation(ANIMATION);
-	GAMESTATE MouseDown(POINT);
+	GAMESTATE MouseDown(POINT,GAMESTATE);
 };
 

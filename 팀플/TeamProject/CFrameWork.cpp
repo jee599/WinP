@@ -42,8 +42,7 @@ void CFrameWork::MouseDown(LPARAM lParam)
 	Point.y = HIWORD((int)lParam);
 
 	if (GameState == TITLE)
-	{
-		GameState = mScene->MouseDown(Point);
+		GameState = mScene->MouseDown(Point, GameState);
 		if (GameState == BATTLE)
 		{
 			InitialObject();
@@ -57,7 +56,6 @@ void CFrameWork::MouseDown(LPARAM lParam)
 			mDuo = new CPlayer(WATER, 0);
 			mEnemy[mEnemyCount++] = new CEnemy;
 		}
-	}
 }
 
 void CFrameWork::Render(HDC MainBuffer)
