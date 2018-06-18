@@ -31,8 +31,6 @@ void CFrameWork::InitialObject()
 	IsInit = true;
 	srand((unsigned int)time(NULL));
 	mEnemyCount = 0;
-	//mPlayer = new CPlayer(FIRE, 1);
-	//mDuo = new CPlayer(WATER, 0);
 }
 
 void CFrameWork::MouseDown(LPARAM lParam)
@@ -41,21 +39,23 @@ void CFrameWork::MouseDown(LPARAM lParam)
 	Point.x = LOWORD((int)lParam);
 	Point.y = HIWORD((int)lParam);
 
-	if (GameState == TITLE)
+	if (GameState == TITLE || GameState == PICK)
 		GameState = mScene->MouseDown(Point, GameState);
-		if (GameState == BATTLE)
-		{
-			InitialObject();
-			mPlayer = new CPlayer(FIRE, 1);
-			mDuo = new CPlayer(WATER, 2);
-		}
-		if (GameState == GAMEPLAY)
-		{
-			InitialObject();
-			mPlayer = new CPlayer(FIRE, 1);
-			mDuo = new CPlayer(WATER, 0);
-			mEnemy[mEnemyCount++] = new CEnemy;
-		}
+	
+	if (GameState == BATTLE)
+	{
+		InitialObject();
+		mPlayer = new CPlayer(mScene->Player1, 1);
+		mDuo = new CPlayer(mScene->Player2, 2);
+	}
+
+	if (GameState == GAMEPLAY)
+	{
+		InitialObject();
+		mPlayer = new CPlayer(mScene->Player1, 1);
+		mDuo = new CPlayer(mScene->Player2, 0);
+		mEnemy[mEnemyCount++] = new CEnemy;
+	}
 }
 
 void CFrameWork::Render(HDC MainBuffer)
@@ -173,8 +173,11 @@ void CFrameWork::Animate()
 		CollCheck();
 	}
 	if (GameState == GAMEPLAY)
-	{
+	{		
 		dynamic_cast<CPlayer*>(mPlayer)->Animate();
+		if (dynamic_cast<CPlayer*>(mPlayer)->Skill())
+			for (int i = 0; i < mEnemyCount; ++i)
+				dynamic_cast<CEnemy*>(mEnemy[i])->Collision(1);
 		dynamic_cast<CPlayer*>(mDuo)->Animate();
 		for (int i = 0; i < mItemCount; ++i)
 			dynamic_cast<CItem*>(mItem[i])->Animate();

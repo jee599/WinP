@@ -3,13 +3,13 @@
 CEnemy::CEnemy(GAMESTATE p)
 {
 	mPosition = { WIDTH, 400 };
-	mLife = 200;
+	mLife = 1000;
 	mType = 25;		//BOSS
 	mObjectSize = 75;
 	mState = SPAWN;
 	mMoving = 0;
-	mDir = rand() % 4;
-	mMesh[11].Load(TEXT("Hp.png"));
+	mDir = 3;
+	mMesh[11].Load(TEXT("Life.png"));
 	mMesh[0].Load(TEXT("비주기1.png"));
 	mMesh[1].Load(TEXT("비주기2.png"));
 	mMesh[2].Load(TEXT("비주기3.png"));
@@ -27,12 +27,12 @@ CEnemy::CEnemy()
 {
 	mPosition = { WIDTH, (rand () % 300) *2 + 100 };
 	mType = rand() % 25;
-	mLife = 100 - ((mType /10)+6)*10;
+	mLife = 200 - (mType * 5);
 	mObjectSize = 50;
 	mState = SPAWN;
 	mMoving = 0;
 	mDir = rand() % 4;
-	mMesh[11].Load(TEXT("Hp.png"));
+	mMesh[11].Load(TEXT("Life.png"));
 	switch (mType)
 	{
 	case 1:
@@ -249,7 +249,7 @@ void CEnemy::Render(HDC Buffer)
 		}
 		else
 			mMesh[0].Draw(Buffer, mPosition.x-mObjectSize, mPosition.y - mObjectSize, mObjectSize*2, mObjectSize*2);
-		mMesh[11].Draw(Buffer, mPosition.x - mObjectSize/2, mPosition.y - mObjectSize - 10, 2 * mLife, 10);
+		mMesh[11].Draw(Buffer, mPosition.x - mObjectSize/2, mPosition.y - mObjectSize - 10, (mLife+2)/2, 7);
 		break;
 	case DEAD:
 		if (mType == 25)

@@ -1,6 +1,6 @@
 #include "CPlayer.h"
 
-CPlayer::CPlayer(TYPE Type, int Duo)
+CPlayer::CPlayer(PICKTYPE Type, int Duo)
 {
 	mType = Type;
 	mPlayerType = Duo;			// 0듀오1나 2적
@@ -8,17 +8,38 @@ CPlayer::CPlayer(TYPE Type, int Duo)
 	mMeshCount = 0;
 	mObjectSize = 25;
 	mLevel = 1;
+	mLife = 100;
+	mMana = 0;
+	mSkillTimer = 0;
 	mDamage = 1;
 	mScore = 0;
-	mBulletRate = 8;
+	mBulletRate = 3;
 	mBulletSpeed = 10;
 	mSpeed = 3;
+	
+	IsSkill = false;
+	IsSkillRender = false;
 	IsRevolution = false;
 	mPosition = { 30,200 + 300*Duo};
 	if (Duo == 2)
 		mPosition = { 850, 500 };
-	mMesh[9].Load(TEXT("Hp.png"));
-	//if(Duo < 2)
+	
+	mSkillMesh[0].Load(TEXT("물필1.png"));
+	mSkillMesh[1].Load(TEXT("물필2.png"));
+	mSkillMesh[2].Load(TEXT("물필3.png"));
+	mSkillMesh[3].Load(TEXT("물필4.png"));
+	mSkillMesh[4].Load(TEXT("물필5.png"));
+	mSkillMesh[5].Load(TEXT("물필6.png"));
+	mSkillMesh[6].Load(TEXT("물필7.png"));
+	mSkillMesh[7].Load(TEXT("물필8.png"));
+	mSkillMesh[8].Load(TEXT("물필9.png"));
+	mSkillMesh[9].Load(TEXT("물필1.png"));
+
+	mMesh[6].Load(TEXT("피스킬2.png"));
+	mMesh[7].Load(TEXT("피스킬.png"));
+	mMesh[9].Load(TEXT("Life.png"));
+	mMesh[8].Load(TEXT("Mana.png"));
+	
 	switch (Type)
 	{
 	case FIRE:
@@ -71,6 +92,11 @@ void CPlayer::Move(WPARAM wParam)
 		break;
 	case VK_RETURN:
 		IsBullet = true;
+		break;
+	case 'p':
+		if (mMana == 999)
+			IsSkill = true;
+		break;
 	}
 	else
 	{
@@ -87,6 +113,10 @@ void CPlayer::Move(WPARAM wParam)
 			break;
 		case 'd':
 			mDirect = RIGHT;
+			break;
+		case 'z':
+			if (mMana > 99)
+				IsSkill = true;
 			break;
 		case VK_SPACE:
 			IsBullet = true;
@@ -111,21 +141,23 @@ void CPlayer::MakeBullet()
 		switch (mLevel)
 		{
 		case 1:
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y- 5 }, mType, mDamage,mSpeed,Dir));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y- 5 }, mType, mDamage,mBulletSpeed,Dir));
 			break;
 		case 2:
-			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y }, mType, mDamage, mSpeed, Dir));
-			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y - 20}, mType, mDamage, mSpeed, Dir));
+			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y }, mType, mDamage, mBulletSpeed, Dir));
+			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y - 20}, mType, mDamage, mBulletSpeed, Dir));
 			break;
 		case 3:
-			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y - 40 }, mType, mDamage, mSpeed, Dir));
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 10 }, mType, mDamage, mSpeed, Dir));
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 20}, mType, mDamage, mSpeed, Dir));
+			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y - 40 }, mType, mDamage, mBulletSpeed, Dir));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 10 }, mType, mDamage, mBulletSpeed, Dir));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 20}, mType, mDamage, mBulletSpeed, Dir));
 			break;
 		}
 }
 void CPlayer::Animate()
 {
+	if (mMana < 999)
+		mMana++;
 	if (mScore >= (3*mLevel))
 	{
 		if (mLevel < 3)
@@ -178,6 +210,38 @@ void CPlayer::Animate()
 }
 void CPlayer::Render(HDC Buffer)
 {
+	if (IsSkillRender)
+	{
+		IsSkillRender = true;
+		mSkillMesh[mSkillTimer / 10].Draw(Buffer, 450 + (mSkillTimer) * 3 ,100, 100, 100);
+		mSkillMesh[mSkillTimer / 10].Draw(Buffer, 550 + (mSkillTimer) * 3, 200, 100, 100);
+		mSkillMesh[mSkillTimer / 10].Draw(Buffer, 450 + (mSkillTimer) * 3, 300, 100, 100);
+		mSkillMesh[mSkillTimer / 10].Draw(Buffer, 550 + (mSkillTimer) * 3, 400, 100, 100);
+		mSkillMesh[mSkillTimer / 10].Draw(Buffer, 450 + (mSkillTimer) * 3, 500, 100, 100);
+		mSkillMesh[mSkillTimer++ / 10].Draw(Buffer, 550 + (mSkillTimer) * 3, 600, 100, 100);
+		if (mSkillTimer == 90)
+		{
+			IsSkillRender = false;
+			mSkillTimer = 0;
+			mMana = 0;
+		}
+	}
+	if (IsSkill && mSkillTimer < 550)
+	{
+		if (mSkillTimer < 300 || mSkillTimer > 450)
+			mSkillTimer += 13;
+		else
+			mSkillTimer += 3;
+		mMesh[7].Draw(Buffer, WIDTH - (mSkillTimer * 2), 250, 1200, 200);
+		mMesh[6].Draw(Buffer, -mSkillTimer * 2, 250, 1000, 200);
+
+		if (mSkillTimer > 550)
+		{
+			IsSkillRender = true;
+			mSkillTimer = 0;
+			IsSkill = false;
+		}
+	}
 	for (auto p : mBullet)
 		p->Render(Buffer);
 	if (IsRevolution)
@@ -208,5 +272,6 @@ void CPlayer::Render(HDC Buffer)
 		mMeshCount = mObjectSize*2;
 		mAnimationCut = true;
 	}
-	mMesh[9].Draw(Buffer, mPosition.x - mObjectSize/2, mPosition.y - mObjectSize - 30, 50, 10);
+	mMesh[9].Draw(Buffer, mPosition.x - mObjectSize/2, mPosition.y - mObjectSize - 30, mLife/2 ,5);
+	mMesh[8].Draw(Buffer, mPosition.x - mObjectSize / 2, mPosition.y - mObjectSize - 35, mMana/20 + 1, 5);
 }

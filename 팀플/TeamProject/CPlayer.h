@@ -13,23 +13,32 @@ class CPlayer : public CGameObject
 	int mBulletRate;
 	int mBulletSpeed;
 	int mSpeed;
+	int mMana;
+	int mLife;
+	int mSkillTimer;
 
+	int mDamage;
 	int mScore;
 	int mLevel;
-	TYPE mType;
+
+	PICKTYPE mType;
 	bool IsBullet = false;
 	bool IsRevolution;
 	bool mAnimationCut;
-	int mDamage;
+	bool IsSkillRender = false;
+	bool IsSkill;
+
+	CImage mSkillMesh[10];
 public:
 	vector<CBullet*> mBullet;
 
 public:
 	CPlayer() {}
-	CPlayer(TYPE,int );
+	CPlayer(PICKTYPE, int);
 	~CPlayer();
 
 public:
+	bool Skill() { return IsSkillRender; }
 	void Move(WPARAM);
 	void Render(HDC);
 	void MakeBullet();

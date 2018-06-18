@@ -13,7 +13,7 @@ int CBullet::GetDamage()
 {
 	return mDamage;
 }
-CBullet::CBullet(POINT p, TYPE Type, int Damage, int Speed ,bool Dir)
+CBullet::CBullet(POINT p, PICKTYPE Type, int Damage, int Speed ,bool Dir)
 {
 	mDamage = Damage;
 	mRight = Dir;
@@ -70,7 +70,9 @@ bool CBullet::Animate()
 
 void CBullet::Render(HDC Buffer)
 {
+	
 	if (mMeshCount >= 40)
 		mMeshCount = 0;
+	//mMesh[mMeshCount++ / 10].BitBlt(Buffer, mPosition.x, mPosition.y);
 	mMesh[mMeshCount++ / 10].Draw(Buffer, mPosition.x, mPosition.y, mObjectSize, mObjectSize);
 }

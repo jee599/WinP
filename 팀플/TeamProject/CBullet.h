@@ -8,7 +8,7 @@ class CBullet : public CGameObject
 	int mSpeed;
 public:
 	CBullet();
-	CBullet(POINT, TYPE, int, int ,bool);
+	CBullet(POINT, PICKTYPE, int, int ,bool);
 	~CBullet();
 
 	bool Animate();
