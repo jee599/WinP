@@ -3,10 +3,12 @@
 
 class CBullet : public CGameObject
 {
-	int mDamage ;
+	int mDamage;
+	bool mRight;
+	int mSpeed;
 public:
 	CBullet();
-	CBullet(POINT, TYPE, int);
+	CBullet(POINT, TYPE, int, int ,bool);
 	~CBullet();
 
 	bool Animate();

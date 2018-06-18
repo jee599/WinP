@@ -15,7 +15,7 @@ CScene::CScene()
 
 
 	// Button
-	Button[CHANGE] = { 646,606,741,670 };
+	Button[BATTLE] = { 400,670,650,755 };
 	Button[GAMEPLAY] = { 120,650,380,750 };
 	Button[EXIT] = { 650,650,950,750 };
 	
@@ -39,8 +39,8 @@ CScene::~CScene()
 
 GAMESTATE CScene::MouseDown(POINT Point)
 {
-	if (PtInRect(&Button[CHANGE], Point))
-		return CHANGE;
+	if (PtInRect(&Button[BATTLE], Point))
+		return BATTLE;
 	if (PtInRect(&Button[GAMEPLAY], Point))
 		return GAMEPLAY;
 	if (PtInRect(&Button[EXIT], Point))
@@ -73,7 +73,7 @@ void CScene::Render(HDC Buffer, GAMESTATE State)
 		mTitleMesh[4].Draw(Buffer, 400, 670,250,75 ); // Battle
 	}
 
-	if (State == CHANGE)
+	if (State == BATTLE)
 	{
 
 	}

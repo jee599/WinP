@@ -13,10 +13,11 @@ int CBullet::GetDamage()
 {
 	return mDamage;
 }
-CBullet::CBullet(POINT p, TYPE Type, int Damage)
+CBullet::CBullet(POINT p, TYPE Type, int Damage, int Speed ,bool Dir)
 {
 	mDamage = Damage;
-
+	mRight = Dir;
+	mSpeed = Speed;
 	switch (Type)
 	{
 	case FIRE:
@@ -58,7 +59,10 @@ bool CBullet::CollCheck(RECT Rect)
 }
 bool CBullet::Animate()
 {
-	mPosition.x += BULLETSPEED;
+	if (mRight == true)
+		mPosition.x += mSpeed;
+	else
+		mPosition.x -= mSpeed;
 	if (mPosition.x >= WIDTH)
 		return true;
 	return false;

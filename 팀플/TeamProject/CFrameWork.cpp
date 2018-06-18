@@ -2,7 +2,9 @@
 
 CFrameWork::CFrameWork()
 {
+	GameState = TITLE;
 	InitialObject();
+
 	if (!mScene)
 		mScene = new CScene;
 
@@ -29,11 +31,8 @@ void CFrameWork::InitialObject()
 	IsInit = true;
 	srand((unsigned int)time(NULL));
 	mEnemyCount = 0;
-	mEnemy[mEnemyCount++] = new CEnemy;
-	mPlayer = new CPlayer(FIRE, 1);
-	mDuo = new CPlayer(WATER, 0);
-	GameState = TITLE;
-	mBoss = new CEnemy(BOSS);
+	//mPlayer = new CPlayer(FIRE, 1);
+	//mDuo = new CPlayer(WATER, 0);
 }
 
 void CFrameWork::MouseDown(LPARAM lParam)
@@ -43,7 +42,22 @@ void CFrameWork::MouseDown(LPARAM lParam)
 	Point.y = HIWORD((int)lParam);
 
 	if (GameState == TITLE)
+	{
 		GameState = mScene->MouseDown(Point);
+		if (GameState == BATTLE)
+		{
+			InitialObject();
+			mPlayer = new CPlayer(FIRE, 1);
+			mDuo = new CPlayer(WATER, 2);
+		}
+		if (GameState == GAMEPLAY)
+		{
+			InitialObject();
+			mPlayer = new CPlayer(FIRE, 1);
+			mDuo = new CPlayer(WATER, 0);
+			mEnemy[mEnemyCount++] = new CEnemy;
+		}
+	}
 }
 
 void CFrameWork::Render(HDC MainBuffer)
@@ -54,7 +68,13 @@ void CFrameWork::Render(HDC MainBuffer)
 	PatBlt(BackBuffer, 0, 0, WIDTH, HEIGHT, WHITENESS);
 
 	mScene->Render(BackBuffer,GameState);
-
+	if (GameState == BATTLE)
+	{
+		for (int i = 0; i < mItemCount; ++i)
+			mItem[i]->Render(BackBuffer);
+		mDuo->Render(BackBuffer);
+		mPlayer->Render(BackBuffer);
+	}
 	if (GameState == GAMEPLAY)
 	{
 		for (int i = 0; i < mItemCount; ++i)
@@ -124,7 +144,6 @@ void CFrameWork::Animate()
 	if (GameState == TITLE && IsInit)
 	{
 		DestroyObject();
-		InitialObject();
 		IsInit = false;
 	}
 	if (IsBoss)
@@ -137,7 +156,7 @@ void CFrameWork::Animate()
 		if (Result == 4)
 		{
 			IsInit = true;
-			GameState = TITLE;
+			GameState = END;
 		}
 
 		for (int i = 1; i < mEnemyCount; ++i)
@@ -147,7 +166,6 @@ void CFrameWork::Animate()
 				MakeFood(dynamic_cast<CEnemy*>(mEnemy[i])->GetPosition());
 			if (Result)
 			{
-				dynamic_cast<CPlayer*>(mPlayer)->ScoreUp();
 				delete mEnemy[i];
 				for (int j = i; j < mEnemyCount; ++j)
 					mEnemy[j] = mEnemy[j + 1];
@@ -175,7 +193,6 @@ void CFrameWork::Animate()
 				MakeFood(dynamic_cast<CEnemy*>(mEnemy[i])->GetPosition());
 			if (Result)
 			{
-				dynamic_cast<CPlayer*>(mPlayer)->ScoreUp();
 				delete mEnemy[i];
 				mBossCount++;
 				for (int j = i; j < mEnemyCount; ++j)
@@ -194,7 +211,7 @@ void CFrameWork::CollCheck()
 	{
 		if (IntersectRect(&Temp, &(mItem[i]->GetRect()), &(mPlayer->GetRect())))
 		{
-			dynamic_cast<CPlayer*>(mPlayer)->DamageUp();
+			dynamic_cast<CPlayer*>(mPlayer)->ScoreUp();
 			delete mItem[i];
 			for (int j = i; j < mItemCount; ++j)
 			{
@@ -204,7 +221,7 @@ void CFrameWork::CollCheck()
 		}
 		else if (IntersectRect(&Temp, &(mItem[i]->GetRect()), &(mDuo->GetRect())))
 		{
-			dynamic_cast<CPlayer*>(mDuo)->DamageUp();
+			dynamic_cast<CPlayer*>(mDuo)->ScoreUp();
 			delete mItem[i];
 			for (int j = i; j < mItemCount; ++j)
 			{

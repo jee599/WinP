@@ -3,21 +3,27 @@
 CPlayer::CPlayer(TYPE Type, int Duo)
 {
 	mType = Type;
-	mDuoMode = Duo;
+	mPlayerType = Duo;			// 0µà¿À1³ª 2Àû
 	mDirect = STOP;
 	mMeshCount = 0;
 	mObjectSize = 25;
 	mLevel = 1;
 	mDamage = 1;
 	mScore = 0;
+	mBulletRate = 8;
+	mBulletSpeed = 10;
+	mSpeed = 3;
 	IsRevolution = false;
 	mPosition = { 30,200 + 300*Duo};
+	if (Duo == 2)
+		mPosition = { 850, 500 };
 	mMesh[9].Load(TEXT("Hp.png"));
+	//if(Duo < 2)
 	switch (Type)
 	{
 	case FIRE:
-		mMesh[0].Load(TEXT("ÇÇÄ«Ãò1.png"));
-		mMesh[1].Load(TEXT("ÇÇÄ«Ãò2.png"));
+		mMesh[0].Load(TEXT("ÆÄÀÌ¸®1.png"));
+		mMesh[1].Load(TEXT("ÆÄÀÌ¸®2.png"));
 		mMesh[2].Load(TEXT("ÆÄÀÌ¸®3.png"));
 		break;
 	case WATER:
@@ -27,9 +33,13 @@ CPlayer::CPlayer(TYPE Type, int Duo)
 		break;
 	case GRASS:
 		mMesh[0].Load(TEXT("ÀÌ»óÇØ¾¾1.png"));
+		mMesh[1].Load(TEXT("ÀÌ»óÇØ¾¾2.png"));
+		mMesh[2].Load(TEXT("ÀÌ»óÇØ¾¾3.png"));
 		break;
 	case ELEC:
 		mMesh[0].Load(TEXT("ÇÇÄ«Ãò1.png"));
+		mMesh[1].Load(TEXT("ÇÇÄ«Ãò2.png"));
+		mMesh[2].Load(TEXT("ÇÇÄ«Ãò3.png"));
 		break;
 	}
 }
@@ -43,7 +53,7 @@ CPlayer::~CPlayer()
 
 void CPlayer::Move(WPARAM wParam)
 {
-	if(mDuoMode)
+	if(mPlayerType == 1)
 	// Set Player Direction by wParam
 	switch (wParam)
 	{
@@ -91,33 +101,44 @@ void CPlayer::StopBullet()
 void CPlayer::MakeBullet()
 {
 	// Make Bullet with Player Position
+	bool Dir;
+	if (mPlayerType < 2)
+		Dir = true;
+	else
+		Dir = false;
+
 	if(IsBullet)
 		switch (mLevel)
 		{
 		case 1:
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y- 5 }, mType, mDamage));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y- 5 }, mType, mDamage,mSpeed,Dir));
 			break;
 		case 2:
-			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y }, mType, mDamage));
-			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y - 20}, mType, mDamage));
+			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y }, mType, mDamage, mSpeed, Dir));
+			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y - 20}, mType, mDamage, mSpeed, Dir));
 			break;
 		case 3:
-			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y - 40 }, mType, mDamage));
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 10 }, mType, mDamage));
-			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 20}, mType, mDamage));
+			mBullet.push_back(new CBullet({ mPosition.x , mPosition.y - 40 }, mType, mDamage, mSpeed, Dir));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y - 10 }, mType, mDamage, mSpeed, Dir));
+			mBullet.push_back(new CBullet({ mPosition.x, mPosition.y + 20}, mType, mDamage, mSpeed, Dir));
 			break;
 		}
 }
 void CPlayer::Animate()
 {
-	if (mScore > (1*mLevel) && mLevel <3)
+	if (mScore >= (3*mLevel))
 	{
-		mLevel++;
-		mObjectSize += 5;
+		if (mLevel < 3)
+		{
+			mLevel++;
+			mObjectSize += 5;
+			IsRevolution = true;
+		}
+		else
+			mDamage++;
 		mScore = 0;
-		IsRevolution = true;
 	}
-	if (mBulletCount++ == BULLETRATE)
+	if (mBulletCount++ == mBulletRate)
 	{
 		MakeBullet();
 		mBulletCount = 0;
@@ -138,16 +159,16 @@ void CPlayer::Animate()
 		switch (mDirect)
 		{
 		case DOWN:
-			mPosition.y += PLAYERSPEED;
+			mPosition.y += mSpeed;
 			break;
 		case UP:
-			mPosition.y -= PLAYERSPEED;
+			mPosition.y -= mSpeed;
 			break;
 		case LEFT:
-			mPosition.x -= PLAYERSPEED;
+			mPosition.x -= mSpeed;
 			break;
 		case RIGHT:
-			mPosition.x += PLAYERSPEED;
+			mPosition.x += mSpeed;
 			break;
 		}
 	if (mPosition.x >= WIDTH || mPosition.x <= 0 || mPosition.y >= HEIGHT || mPosition.y <= 0)
