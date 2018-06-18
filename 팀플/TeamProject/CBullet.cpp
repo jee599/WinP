@@ -39,10 +39,10 @@ CBullet::CBullet(POINT p, TYPE Type, int Damage, int Speed ,bool Dir)
 		mMesh[3].Load(TEXT("grass4.png"));
 		break;
 	case ELEC:
-		mMesh[0].Load(TEXT("grass1.png"));
-		mMesh[1].Load(TEXT("grass2.png"));
-		mMesh[2].Load(TEXT("grass3.png"));
-		mMesh[3].Load(TEXT("grass4.png"));
+		mMesh[0].Load(TEXT("elec.png"));
+		mMesh[1].Load(TEXT("elec.png"));
+		mMesh[2].Load(TEXT("elec.png"));
+		mMesh[3].Load(TEXT("elec.png"));
 		break;
 	}
 	mPosition = p;
