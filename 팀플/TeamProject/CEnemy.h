@@ -15,6 +15,7 @@ public:
 	CEnemy(GAMESTATE);
 	~CEnemy();
 
+	void GetDamage();
 	void Render(HDC);
 	bool Collision(int);
 	int Animate();
