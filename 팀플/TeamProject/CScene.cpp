@@ -4,15 +4,8 @@ CScene::CScene()
 {
 	mMeshCount = 0;
 	// Main State Mesh
-	mTitleMesh[0].Load(TEXT("메인화면.png"));
-
-	mTitleMesh[1].Load(TEXT("제목1.png"));
-	mTitleMesh[2].Load(TEXT("adventure.png"));
-	mTitleMesh[3].Load(TEXT("종료.png"));
-	mTitleMesh[4].Load(TEXT("battle.png"));
-
-	//mTitleMesh[3].Load(TEXT("배경4.png"));
-
+	PlaySound("Main_Sound.wav", NULL, SND_ASYNC | SND_LOOP); // 배경음악-이거는 캐릭터선택창까지 나오게하면될거같음
+	mTitleMesh[0].Load(TEXT("메인화면1.png"));
 
 	// Button
 	Button[BATTLE] = { 400,670,650,755 };
@@ -42,7 +35,12 @@ GAMESTATE CScene::MouseDown(POINT Point)
 	if (PtInRect(&Button[BATTLE], Point))
 		return BATTLE;
 	if (PtInRect(&Button[GAMEPLAY], Point))
+	{
+		PlaySound(NULL, NULL, NULL);
+		PlaySound("Boss.wav", NULL, SND_ASYNC | SND_LOOP);
 		return GAMEPLAY;
+	}
+
 	if (PtInRect(&Button[EXIT], Point))
 		return EXIT;
 	return TITLE;
@@ -67,10 +65,7 @@ void CScene::Render(HDC Buffer, GAMESTATE State)
 			mMeshCount = 0;
 		//mTitleMesh[mMeshCount++ / 15].Draw(Buffer, 0, 0, WIDTH, HEIGHT);
 		mTitleMesh[0].Draw(Buffer, 0, 0, WIDTH, HEIGHT);
-		mTitleMesh[1].Draw(Buffer, 90, 20); // Title
-		mTitleMesh[2].Draw(Buffer, 75, 655); // Start
-		mTitleMesh[3].Draw(Buffer, 700, 650); // Exit
-		mTitleMesh[4].Draw(Buffer, 400, 670,250,75 ); // Battle
+
 	}
 
 	if (State == BATTLE)

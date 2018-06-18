@@ -1,10 +1,12 @@
 #pragma once
+#pragma comment(lib, "winmm.lib" )
 #include <Windows.h>
 #include <atlImage.h>
 #include <time.h>
 #include <iostream>
 #include <vector>
 #include <iterator>
+#include <MMSystem.h>
 
 //#include"resource.h"
 using namespace std;
