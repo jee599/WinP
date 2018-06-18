@@ -17,10 +17,15 @@ void CGameObject::Render(HDC) {}
 CItem::CItem(POINT Position)
 {
 	mSpeed = 1;
-	mObjectSize = 25;
+	mObjectSize = 20;
 	mPosition = Position;
 	mDir = 0;
-	mMesh[0].Load(TEXT("item.png"));
+	mType = rand() % 5;
+	mMesh[0].Load(TEXT("meta.png"));
+	mMesh[1].Load(TEXT("item1.png"));
+	mMesh[2].Load(TEXT("item2.png"));
+	mMesh[3].Load(TEXT("item3.png"));
+	mMesh[4].Load(TEXT("item4.png"));
 }
 void CItem::Animate()
 {
@@ -54,7 +59,7 @@ void CItem::Animate()
 }
 void CItem::Render(HDC Buffer)
 {
-	mMesh[0].Draw(Buffer, mPosition.x, mPosition.y, mObjectSize*2, mObjectSize*2);
+	mMesh[mType].Draw(Buffer, mPosition.x, mPosition.y, mObjectSize*2, mObjectSize*2);
 }
 CItem::CItem()
 {

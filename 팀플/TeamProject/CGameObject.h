@@ -23,6 +23,7 @@ public:
 class CItem : public CGameObject
 {
 	int mDir;
+	int mType;
 	int mSpeed;
 public:
 	CItem();
@@ -30,6 +31,8 @@ public:
 	CItem(POINT);
 
 public:
+
+	int GetType() { return mType; }
 	void Animate();
 	void Render(HDC);
 };

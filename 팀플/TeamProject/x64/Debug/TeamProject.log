@@ -1,6 +1,2 @@
-﻿  00.Main.cpp
-  CFrameWork.cpp
-c:\users\지동\documents\github\winp\팀플\teamproject\cframework.cpp(178): error C2660: 'CEnemy::Collision': 함수는 0개의 매개 변수를 사용하지 않습니다.
-  c:\users\지동\documents\github\winp\팀플\teamproject\cenemy.h(20): note: 'CEnemy::Collision' 선언을 참조하십시오.
-  CPlayer.cpp
-  코드를 생성하고 있습니다...
+﻿  CFrameWork.cpp
+  TeamProject.vcxproj -> C:\Users\지동\Documents\GitHub\WinP\팀플\x64\Debug\TeamProject.exe

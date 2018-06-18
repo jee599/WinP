@@ -25,13 +25,14 @@ class CPlayer : public CGameObject
 	bool IsBullet = false;
 	bool IsRevolution;
 	bool mAnimationCut;
-	bool IsSkillRender = false;
 	bool IsSkill;
 
-	CImage mSkillMesh[10];
+	CImage mSkillMesh[15];
+	CImage mEffectMesh[10];
 public:
 	vector<CBullet*> mBullet;
-
+	bool IsSkillRender = false;
+	int mEffectTimer = 0;
 public:
 	CPlayer() {}
 	CPlayer(PICKTYPE, int);
@@ -44,7 +45,7 @@ public:
 	void MakeBullet();
 	void Animate();
 	void StopBullet();
-	void ScoreUp() { mScore++; }
+	void ScoreUp(int);
 	void DamageUp() { mDamage++; }
 };
 

@@ -260,10 +260,10 @@ void CEnemy::Render(HDC Buffer)
 	case DEL:
 		if (mType == 25)
 			IsEnd = 4;			//Boss End
-		else if (rand()% 10 > 3)
-			IsEnd = 1;			// Normal End
 		else
-			IsEnd = 2;			//ITem End
+			IsEnd = 2;			// Normal End
+		//else
+		//	IsEnd = 2;			//ITem End
 		break;
 	}
 }

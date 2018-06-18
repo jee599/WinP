@@ -10,6 +10,7 @@ CScene::CScene()
 	mTitleMesh[2].Load(TEXT("Start.png"));
 	mTitleMesh[3].Load(TEXT("Cancle.png"));
 
+	mTitleMesh[4].Load(TEXT("Win.png"));
 	mPlayMesh[9].Load(TEXT("stage11.png"));
 	// Font
 	mFontMesh[0].Load(TEXT("Morning.png"));
@@ -50,7 +51,11 @@ GAMESTATE CScene::MouseDown(POINT Point, GAMESTATE State)
 {
 	RECT Temp = { 400, 350, 550, 425 };
 	RECT Temp1 = { 400, 450, 550, 525 };
+	RECT Temp2 = { 0,0,WIDTH,HEIGHT };
 
+	if (State == WIN)
+		if (PtInRect(&Temp2, Point))
+			return TITLE;
 	if (State == PICK)
 	{
 		for (int i = 1; i < 5; ++i)
@@ -96,6 +101,8 @@ void CScene::Animation(ANIMATION State)
 
 void CScene::Render(HDC Buffer, GAMESTATE State)
 {
+	if (State == WIN)
+		mTitleMesh[4].Draw(Buffer, 0, 0, WIDTH, HEIGHT);
 	if (State == TITLE)
 		mTitleMesh[0].Draw(Buffer, 0, 0, WIDTH, HEIGHT);
 	if (State == PICK)

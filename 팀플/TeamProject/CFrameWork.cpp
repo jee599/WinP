@@ -2,7 +2,7 @@
 
 CFrameWork::CFrameWork()
 {
-	GameState = TITLE;
+	GameState = WIN;
 	InitialObject();
 
 	if (!mScene)
@@ -31,6 +31,8 @@ void CFrameWork::InitialObject()
 	IsInit = true;
 	srand((unsigned int)time(NULL));
 	mEnemyCount = 0;
+	//mPlayer = new CPlayer(FIRE, 1);
+	//mDuo = new CPlayer(WATER, 0);
 }
 
 void CFrameWork::MouseDown(LPARAM lParam)
@@ -39,16 +41,14 @@ void CFrameWork::MouseDown(LPARAM lParam)
 	Point.x = LOWORD((int)lParam);
 	Point.y = HIWORD((int)lParam);
 
-	if (GameState == TITLE || GameState == PICK)
+	if (GameState == TITLE || GameState == PICK || GameState == WIN)
 		GameState = mScene->MouseDown(Point, GameState);
-	
 	if (GameState == BATTLE)
 	{
 		InitialObject();
 		mPlayer = new CPlayer(mScene->Player1, 1);
 		mDuo = new CPlayer(mScene->Player2, 2);
 	}
-
 	if (GameState == GAMEPLAY)
 	{
 		InitialObject();
@@ -65,7 +65,7 @@ void CFrameWork::Render(HDC MainBuffer)
 	SelectObject(BackBuffer, (HBITMAP)hBitmap);
 	PatBlt(BackBuffer, 0, 0, WIDTH, HEIGHT, WHITENESS);
 
-	mScene->Render(BackBuffer,GameState);
+	mScene->Render(BackBuffer, GameState);
 	if (GameState == BATTLE)
 	{
 		for (int i = 0; i < mItemCount; ++i)
@@ -77,7 +77,7 @@ void CFrameWork::Render(HDC MainBuffer)
 	{
 		for (int i = 0; i < mItemCount; ++i)
 			mItem[i]->Render(BackBuffer);
-		for (int i = 0; i < mEnemyCount;++i)
+		for (int i = 0; i < mEnemyCount; ++i)
 			mEnemy[i]->Render(BackBuffer);
 		mDuo->Render(BackBuffer);
 		mPlayer->Render(BackBuffer);
@@ -154,7 +154,7 @@ void CFrameWork::Animate()
 		if (Result == 4)
 		{
 			IsInit = true;
-			GameState = END;
+			GameState = WIN;
 		}
 
 		for (int i = 1; i < mEnemyCount; ++i)
@@ -170,14 +170,15 @@ void CFrameWork::Animate()
 				mEnemyCount--;
 			}
 		}
+		if (dynamic_cast<CPlayer*>(mPlayer)->mEffectTimer || dynamic_cast<CPlayer*>(mDuo)->mEffectTimer)
+			for (int i = 0; i < mEnemyCount; ++i)
+				dynamic_cast<CEnemy*>(mEnemy[i])->Collision(1);
+
 		CollCheck();
 	}
 	if (GameState == GAMEPLAY)
-	{		
+	{
 		dynamic_cast<CPlayer*>(mPlayer)->Animate();
-		if (dynamic_cast<CPlayer*>(mPlayer)->Skill())
-			for (int i = 0; i < mEnemyCount; ++i)
-				dynamic_cast<CEnemy*>(mEnemy[i])->Collision(1);
 		dynamic_cast<CPlayer*>(mDuo)->Animate();
 		for (int i = 0; i < mItemCount; ++i)
 			dynamic_cast<CItem*>(mItem[i])->Animate();
@@ -187,6 +188,10 @@ void CFrameWork::Animate()
 		}
 		if (++Timer % 100 == 0)
 			mEnemy[mEnemyCount++] = new CEnemy;
+		if (dynamic_cast<CPlayer*>(mPlayer)->mEffectTimer || dynamic_cast<CPlayer*>(mDuo)->mEffectTimer)
+			for (int i = 0; i < mEnemyCount; ++i)
+				dynamic_cast<CEnemy*>(mEnemy[i])->Collision(1);
+			
 		for (int i = 0; i < mEnemyCount; ++i)
 		{
 			int Result = dynamic_cast<CEnemy*>(mEnemy[i])->Animate();
@@ -212,7 +217,7 @@ void CFrameWork::CollCheck()
 	{
 		if (IntersectRect(&Temp, &(mItem[i]->GetRect()), &(mPlayer->GetRect())))
 		{
-			dynamic_cast<CPlayer*>(mPlayer)->ScoreUp();
+			dynamic_cast<CPlayer*>(mPlayer)->ScoreUp(dynamic_cast<CItem*>(mItem[i])->GetType());
 			delete mItem[i];
 			for (int j = i; j < mItemCount; ++j)
 			{
@@ -222,7 +227,7 @@ void CFrameWork::CollCheck()
 		}
 		else if (IntersectRect(&Temp, &(mItem[i]->GetRect()), &(mDuo->GetRect())))
 		{
-			dynamic_cast<CPlayer*>(mDuo)->ScoreUp();
+			dynamic_cast<CPlayer*>(mDuo)->ScoreUp(dynamic_cast<CItem*>(mItem[i])->GetType());
 			delete mItem[i];
 			for (int j = i; j < mItemCount; ++j)
 			{
@@ -278,7 +283,7 @@ void CFrameWork::DestroyObject()
 {
 	for (int i = 0; i < mItemCount; ++i)
 		delete mItem[i];
-	for(int i = 0; i < mEnemyCount;++i)
+	for (int i = 0; i < mEnemyCount; ++i)
 		delete mEnemy[i];
 	delete mDuo;
 	delete mPlayer;
