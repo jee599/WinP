@@ -2,7 +2,7 @@
 
 CFrameWork::CFrameWork()
 {
-	GameState = WIN;
+	GameState = TITLE;
 	InitialObject();
 
 	if (!mScene)
